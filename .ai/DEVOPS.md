@@ -1,7 +1,8 @@
 # DEVOPS — rein-plugins
 
 ## Pipeline (E-2, 2026-11-08)
-Hosted on GitHub Actions: `.github/workflows/ci.yml`, on every push and pull request.
+Hosted on GitHub Actions: `.github/workflows/ci.yml`, on every pull request and on pushes to
+`main` and `stable` (E-7, 2026-11-08: a pushed PR branch no longer runs the pipeline twice).
 
 | Job | What | Fails with |
 |---|---|---|
@@ -28,3 +29,9 @@ Revert the commit that changed `ci.yml`; nothing outside the repository depends 
 `node scripts/check-marketplace.mjs .`, `claude plugin validate --strict .`, the scan via a local
 rein checkout (`node <rein>/src/shared/publish-scan.mjs scan-tree .`), and
 `claude plugin eval plugins/<name> --trust-plugin --no-publish --ablation none`.
+
+## E-7 — push trigger restricted (2026-11-08)
+- **Change**: `on.push.branches: [main, stable]`; `pull_request` unchanged.
+- **Security**: none — no new secret, network or permission.
+- **Rollback**: drop the `branches` filter.
+- **Gap accepted**: a branch pushed without a PR gets no CI until its PR opens.
