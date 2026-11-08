@@ -1,0 +1,12 @@
+{
+  "_comment": "Verbatim registration JSON rein-app merges into a profile's settings.json (D-006 = rein-app D-002). Owned by rein-app; change only when rein-app changes it.",
+  "extraKnownMarketplaces": {
+    "rein-plugins": { "source": { "source": "github", "repo": "Vimurai/rein-plugins", "ref": "stable" } }
+  },
+  "enabledPlugins": {
+    "rein-seo@rein-plugins": true,
+    "rein-ux@rein-plugins": true,
+    "rein-ops@rein-plugins": true,
+    "rein-data@rein-plugins": true
+  }
+}
