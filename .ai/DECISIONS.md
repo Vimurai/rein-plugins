@@ -170,5 +170,20 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   isolated config dir wrote exactly the D-006 shape, so the JSON matches what Claude Code itself writes.
 - **Source**: rein-app `.ai/DECISIONS.md` D-005.
 
+## D-014 — Mirror of rein-app D-007: registration goes through `claude plugin marketplace add`, not a settings write (2026-11-08)
+- **Decision**: on Claude Code 2.1.319 a hand-written user-scope `extraKnownMarketplaces` entry is
+  NOT registered (absent from `claude plugin marketplace list`; install fails "not found in
+  marketplace"). rein-app therefore registers per profile with
+  `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` and verifies the written
+  entry. The JSON is unchanged from D-006; only the author of the write is Claude Code, not rein-app.
+- **Closes Q4's last clause**: a settings-only start on 2.1.319 is not honoured and installs nothing.
+  The E-4 reconcile layer, once CI has a credential, asserts exactly that (nothing registered,
+  nothing installed) instead of merely reporting.
+- **Our obligation (E-8)**: CI asserts, against the live public repo, that the GitHub-shorthand form
+  `Vimurai/rein-plugins#stable` yields `source.ref == "stable"` in settings.json. rein-app proves the
+  git-URL form locally; the shorthand pin needs the real repo. If `ref` is missing we tell
+  `rein-app · Architect` at once — their exit-7 guard fires and they reopen D-007.
+- **Source**: rein-app `.ai/DECISIONS.md` D-007.
+
 ## Reserved (awaiting upstream D-###)
 - none.

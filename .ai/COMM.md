@@ -102,4 +102,13 @@
   until then; note the flip in the fixture's README.
 - Correct refusal on credentials: never copy an operator login into a throwaway config dir.
 - Forward to me the first `[FIXTURE_Q4_OBSERVED]` lines from CI; I relay them to rein-app.
+
+### Addendum — 2026-11-08 20:35 UTC (rein-app D-007 → D-014, E-8 registered)
+- rein-app proved on Claude Code 2.1.319 that a hand-written `extraKnownMarketplaces` entry is not
+  registered; they now use `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user`.
+  JSON unchanged; author is Claude Code.
+- E-4 reconcile layer: when the credential exists, the expected observation is "not registered,
+  nothing installed" — assert that, not just "nothing installed".
+- E-8 (Tier 2, depends on E-4): CI asserts the shorthand form writes `source.ref == "stable"`
+  against the live repo; `[FIXTURE_REF_MISSING]` → tell me immediately (rein-app reopens D-007).
 ---
