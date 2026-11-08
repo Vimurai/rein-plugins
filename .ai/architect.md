@@ -147,7 +147,7 @@ retired as DONE with a summary pointing here, so the plan's E-1..E-4 land as **E
 |---|---|---|---|
 | E-1 | **E-2** | Marketplace skeleton: `marketplace.json`, one empty plugin (`rein-seo` shell) with `plugin.json`, CI running `claude plugin eval` per plugin + publish scan + manifest/name-collision checks; `git init` the repo. Acceptance (amended D-009): hosted checks + publish-scan green; local `claude plugin eval` passes; hosted eval may fail only with `[EVAL_NO_CREDENTIAL]` until the operator sets the secret; `LICENSE` + `license` fields present (D-008). | 2 |
 | E-2 | **E-3** | Move group 1 (§2, `rein-seo`, `rein-ux`, `rein-ops` core): copy from `rein`, eval each bundle, start `.ai/MOVES.md` rows with `removed_by: pending`, then notify **`rein · Architect`** with the unit list so `rein` files its removing E-## (D-004 supersedes the task text that says `rein · Engineer`). Acceptance: all three bundles pass eval; MOVES.md lists every unit; no name changed. | 2 |
-| E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Acceptance: fixture installs every bundle and fails clearly on a missing one. | 2 |
+| E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Skips with a named reason only on a missing `claude` CLI or credential, never on a missing rein release (D-012). Acceptance: fixture registers and enables every bundle and fails clearly on a missing one; the install assertion is added once Q4 (§10) confirms the mechanism. | 2 |
 | — | **E-6** | Make `rein-seo` self-contained (D-011 and its clarification supersede the task text): agents carry a marked mirror of the intent list (named rein commit), call the MCP and report any refusal verbatim, take the blueprint from the consumer project's `.ai/blueprints/`, and report what is missing instead of aborting. Depends on E-3. Acceptance: eval passes with no rein checkout; no `src/` or `~/.rein` path in the bundle. | 2 |
 | — | **E-7** | CI once per PR: restrict the `push` trigger to `main` and `stable` (via `skill: ci_gate`). Tier 1. | 1 |
 | — | **E-2 add-on** | Release pointer: E-2 creates the `stable` branch alongside the trunk and documents in the README that a release fast-forwards `stable` to the tag and a rollback resets it (D-006). GitHub remote `Vimurai/rein-plugins` is created by the operator, not the agent. | 2 |
@@ -161,6 +161,9 @@ Dependency chain: E-2 → E-3 → E-5; E-2 → E-4; E-3 → E-6. No cycles, dept
 - **Q3 — ANSWERED** (rein-app D-002 → D-006): GitHub source `Vimurai/rein-plugins` at `ref: stable`,
   boolean `<plugin>@rein-plugins` keys; see §5, §8.
 All three reserved questions are closed; answers live in `.ai/DECISIONS.md` D-004..D-006.
+- **Q4 → `rein-app · Architect` (open)**: does `enabledPlugins` at user/project scope install the
+  plugin at session start, or only under managed settings? Evidence in D-012's Reserved note.
+  Affects D-006 consequence (3) and rein-app's `profiles apply --enable` premise.
 
 **Standing cross-repo obligations** (Architect-owned):
 - The first release tag is cut after E-3 lands (D-009); when it is on `stable` at

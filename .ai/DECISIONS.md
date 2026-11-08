@@ -112,7 +112,7 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
 - **Also**: seo_content_generator / seo_manager depend on rein-internal files; E-6 makes the
   rein-seo bundle self-contained. Pre-existing behaviour, so not an E-3 blocker.
 
-## D-011 — Mirror of rein D-154: knowledge_architect and seo-cluster-intents stay in rein; group 1 = 12 units (2026-11-08)
+## D-011 — Mirror of rein D-154: knowledge_architect and seo-cluster-intents stay in rein; group 1 = 13 units (2026-11-08)
 - **Decision**: (1) `knowledge_architect` stays in rein for now — no direct-read exception to
   contract §4; it writes the palace and `rein init` dispatches it, so it is rein machinery today. It
   moves later, reading through a palace query tool on memory-manager-mcp (a rein E-## planned with
@@ -125,8 +125,10 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   enumerate the intents — its description lists examples and the MCP rejects bad values at call
   time. So "intents from the schema" means in practice: the agents carry a marked mirror of the
   intent list (source: rein `src/shared/seo-cluster-intents.mjs` at a named commit) and, on an MCP
-  refusal, report the refusal verbatim rather than retrying. rein has been asked to enumerate the set
-  in the tool schema; when it does, the mirror becomes documentation only.
+  refusal, report the refusal verbatim rather than retrying. rein accepted (D-154 addendum, commit
+  e8d9db4): its removing E-## adds the canonical set as an enum on `add_cluster_page.intent_type`,
+  generated from `seo-cluster-intents.mjs` so the two cannot drift. Once that ships, our mirror is
+  documentation only; E-6 cites the rein commit it mirrors and nothing more.
 - **Consequences for E-3 / E-6** (supersedes the "ship the cluster-intents data inside the plugin"
   wording in E-6's task text): `seo_manager` and `seo_content_generator` take the intent set from
   the MCP — its tool schema names the canonical set — and the blueprint from the consumer project's
@@ -137,5 +139,19 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
 - **Body edits**: ours from the copy onward; names invariant (D-151); rein deletes its copies at the tag.
 - **Source**: rein `.ai/DECISIONS.md` D-154, commit 0c95aea.
 
+## D-012 — E-4 fixture skips on a missing claude CLI or credential, not on a missing rein release (2026-11-08)
+- **Decision**: the registration fixture needs only the `claude` CLI and the D-006 literal; it
+  depends on no rein release. Its named-reason skip conditions are therefore "claude CLI absent"
+  and "no credential", replacing the task text's "no rein release available". Approved as proposed
+  by the Engineer.
+- **Why**: architect.md §7 said only the fixture "may require a rein release"; inspection shows it
+  does not. A skip condition that can never trigger hides the real ones.
+
 ## Reserved (awaiting upstream D-###)
-- none.
+- Q4 → `rein-app · Architect`: does an `enabledPlugins` entry at user or project scope actually
+  install the plugin at session start, or only under managed settings? E-4's first finding says the
+  docs promise auto-install only for managed settings and `claude plugin list` stays empty locally
+  with the D-006 JSON at user/project scope. Preliminary; the Engineer is testing an authenticated
+  `-p` start with `CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1`. D-006 consequence (3) ("true = install +
+  enable") is suspended until answered; the fixture asserts enablement, and install only once the
+  mechanism is confirmed.

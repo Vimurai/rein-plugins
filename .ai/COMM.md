@@ -82,4 +82,14 @@
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI
   secret, never a tracked file (§6).
+
+### Addendum — 2026-11-08 20:05 UTC (E-4 rulings)
+- D-012: fixture skips on missing `claude` CLI or credential, not on a missing rein release — approved.
+- Q4 opened with `rein-app · Architect`: whether user/project-scope `enabledPlugins` installs at
+  session start. Until answered the fixture asserts registration + enablement; add the install
+  assertion when the mechanism is confirmed. Send me the `CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1` result.
+- D-011 heading fixed to 13 units; rein's enum commitment (e8d9db4) recorded in D-011.
+- Branch hygiene accepted: feature work in separate worktrees; shared tree stays on the PR/main
+  branch; ping me before I write .ai/ after any switch.
+- Merge order: PR #1 (E-3) → PR #2 (E-7) → E-4.
 ---
