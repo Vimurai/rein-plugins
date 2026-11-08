@@ -3,8 +3,9 @@
 #   publish-scan  rein's publish scan (`scan-tree`) from a PINNED rein release tarball, checksum-verified;
 #                 nothing of rein is vendored here (D-003, contract §1)
 #   eval          `claude plugin eval` for every plugin in marketplace.json, in parallel
+#   registration  E-4 fixture: every bundle installs through the rein-app registration JSON (D-006)
 # Each failure is one named line: [MANIFEST_MISMATCH] [NAME_COLLISION] [PUBLISH_SCAN_HIT] [EVAL_NO_CREDENTIAL] …
-# Secrets: ANTHROPIC_API_KEY (repository secret) for the eval job only; never a tracked file (§6).
+# Secrets: ANTHROPIC_API_KEY (repository secret) for the eval and registration jobs only; never a tracked file (§6).
 # Rollback: revert this file; .ai/DEVOPS.md records the change.
 name: ci
 
@@ -86,3 +87,23 @@ jobs:
         run: |
           [ -n "$ANTHROPIC_API_KEY" ] || { echo "[EVAL_NO_CREDENTIAL] ANTHROPIC_API_KEY secret is not set; the eval is required proof and does not skip"; exit 1; }
           claude plugin eval "plugins/${PLUGIN}" --trust-plugin --no-publish --ablation none --threshold 1.0
+
+  registration:
+    # E-4 registration fixture (architect.md §3.5, D-006, D-012): installs every bundle through the
+    # exact rein-app registration JSON in a throwaway profile. The settings-only reconcile layer is
+    # report-only ([FIXTURE_Q4_OBSERVED]) while rein-app re-rules D-013/D-014; with the secret it
+    # also shows authenticated behaviour.
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
+        with:
+          node-version: "22"
+      - name: Install Claude Code (pinned)
+        run: npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+      - name: Registration fixture
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node tests/registration/fixture.mjs "$GITHUB_WORKSPACE"
