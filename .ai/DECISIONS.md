@@ -105,7 +105,8 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   ship. Its MOVES.md row reads `pending-copy` with this D-### as the reason. The ruling on how it
   moves (read-only with the write dropped, stays in rein, or deferred until memory-manager-mcp
   exposes the palace) is rein's and was asked of `rein · Architect`; a plugin may not carry the write
-  under any outcome.
+  under any outcome. (Count correction: group 1 without knowledge_architect is **13** units — 5 seo,
+  4 ux, 4 ops — not 12 as first written here and in D-011.)
 - **Why**: the write violates the hard rule; a read-only move is the likely outcome, but bodies are
   byte-identical copies today and editing one during a move is a contract interpretation rein owns.
 - **Also**: seo_content_generator / seo_manager depend on rein-internal files; E-6 makes the
@@ -118,7 +119,14 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   the next memory work) and without the maintenance write. Its MOVES.md row is `stays-in-rein`.
   (2) `seo-cluster-intents.mjs` stays in rein: task-synchronizer-mcp imports it to validate
   `add_cluster_page` and the topic-seed tools, so it is MCP contract. (3) Group 1 is accepted as the
-  12 units listed in D-010; rein registers its removing E-## on the Engineer's final-list notice.
+  **13** units named in D-010 (rein's D-154 says "12" but lists the same 13 names; the names govern);
+  rein registers its removing E-## on the Engineer's final-list notice.
+- **E-6 clarification (2026-11-08, after inspection)**: the `add_cluster_page` schema does not
+  enumerate the intents — its description lists examples and the MCP rejects bad values at call
+  time. So "intents from the schema" means in practice: the agents carry a marked mirror of the
+  intent list (source: rein `src/shared/seo-cluster-intents.mjs` at a named commit) and, on an MCP
+  refusal, report the refusal verbatim rather than retrying. rein has been asked to enumerate the set
+  in the tool schema; when it does, the mirror becomes documentation only.
 - **Consequences for E-3 / E-6** (supersedes the "ship the cluster-intents data inside the plugin"
   wording in E-6's task text): `seo_manager` and `seo_content_generator` take the intent set from
   the MCP — its tool schema names the canonical set — and the blueprint from the consumer project's

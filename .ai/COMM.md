@@ -69,6 +69,15 @@
   project's `.ai/blueprints/`; report what is missing instead of aborting. If a prompt needs the
   intent list inline, ship it as a marked mirror of the rein version. Strip the `src/` references in
   E-3 if cheap; otherwise E-6.
+
+### Addendum — 2026-11-08 19:45 UTC (E-3 PR #1 review notes)
+- Count corrected: group 1 is 13 units (my error, D-010/D-011 fixed). Notify rein with 13.
+- E-6 clarified in D-011: marked mirror of the intent list + report MCP refusals verbatim; the
+  schema does not enumerate intents today.
+- E-7 registered (Tier 1): restrict CI `push` trigger to main/stable; go through `skill: ci_gate`.
+- E-4 may start now on its own branch (it depends only on E-2, which is DONE); keep E-3's PR
+  separate and merge it first when the secret lands.
+- Merge of PR #1 waits for hosted eval green (D-009's check); the operator sets the secret.
 - The repo is not yet a git repository, so this COMM entry is uncommitted; commit it as part of
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI

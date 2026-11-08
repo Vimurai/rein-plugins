@@ -35,8 +35,8 @@ init; no bundle is defined for it yet.
 
 Notes on group 1 (D-010, D-011 = rein D-154): `knowledge_architect` **stays in rein** — it writes
 `~/.rein`, which §6 forbids, and `rein init` dispatches it. It moves later, reading through a palace
-query tool on memory-manager-mcp and without the maintenance write. Group 1 is therefore **12
-units**. `seo-cluster-intents.mjs` also stays in rein (MCP contract): `seo_manager` /
+query tool on memory-manager-mcp and without the maintenance write. Group 1 is therefore **13
+units** (5 seo, 4 ux, 4 ops). `seo-cluster-intents.mjs` also stays in rein (MCP contract): `seo_manager` /
 `seo_content_generator` take the intent set from the task-synchronizer-mcp tool schema and the
 blueprint from the consumer project's `.ai/blueprints/`, or report which is missing; E-6 removes
 every rein `src/` path from the bundle and may carry only a marked mirror of the intent list for
@@ -148,7 +148,8 @@ retired as DONE with a summary pointing here, so the plan's E-1..E-4 land as **E
 | E-1 | **E-2** | Marketplace skeleton: `marketplace.json`, one empty plugin (`rein-seo` shell) with `plugin.json`, CI running `claude plugin eval` per plugin + publish scan + manifest/name-collision checks; `git init` the repo. Acceptance (amended D-009): hosted checks + publish-scan green; local `claude plugin eval` passes; hosted eval may fail only with `[EVAL_NO_CREDENTIAL]` until the operator sets the secret; `LICENSE` + `license` fields present (D-008). | 2 |
 | E-2 | **E-3** | Move group 1 (§2, `rein-seo`, `rein-ux`, `rein-ops` core): copy from `rein`, eval each bundle, start `.ai/MOVES.md` rows with `removed_by: pending`, then notify **`rein · Architect`** with the unit list so `rein` files its removing E-## (D-004 supersedes the task text that says `rein · Engineer`). Acceptance: all three bundles pass eval; MOVES.md lists every unit; no name changed. | 2 |
 | E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Acceptance: fixture installs every bundle and fails clearly on a missing one. | 2 |
-| — | **E-6** | Make `rein-seo` self-contained (D-011 supersedes the task text's "ship the data"): agents read the intent set from the MCP tool schema and the blueprint from the consumer project's `.ai/blueprints/`, reporting what is missing instead of aborting; at most a marked mirror of the intent list for prompts. Depends on E-3. Acceptance: eval passes with no rein checkout; no `src/` or `~/.rein` path in the bundle. | 2 |
+| — | **E-6** | Make `rein-seo` self-contained (D-011 and its clarification supersede the task text): agents carry a marked mirror of the intent list (named rein commit), call the MCP and report any refusal verbatim, take the blueprint from the consumer project's `.ai/blueprints/`, and report what is missing instead of aborting. Depends on E-3. Acceptance: eval passes with no rein checkout; no `src/` or `~/.rein` path in the bundle. | 2 |
+| — | **E-7** | CI once per PR: restrict the `push` trigger to `main` and `stable` (via `skill: ci_gate`). Tier 1. | 1 |
 | — | **E-2 add-on** | Release pointer: E-2 creates the `stable` branch alongside the trunk and documents in the README that a release fast-forwards `stable` to the tag and a rollback resets it (D-006). GitHub remote `Vimurai/rein-plugins` is created by the operator, not the agent. | 2 |
 | E-4 | **E-5** | Move group 2 (§2, `rein-ops` extension + `rein-data`), same two-sided protocol as E-3. Acceptance: eval green; MOVES.md rows added; **`rein · Architect`** notified (D-004 supersedes the task text). | 2 |
 
