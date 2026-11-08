@@ -207,6 +207,26 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   what changes is the claim that a settings write alone is inert, which any authenticated session
   start seems to falsify.
 
+## D-016 — Mirror of rein-app D-009: explicit registration stays primary; install-from-settings is tolerated, not relied on (2026-11-08)
+- **Decision** (rein-app's): `claude plugin marketplace add Vimurai/rein-plugins#stable` +
+  `claude plugin install` stays the primary flow (immediate, verifiable at apply time). The
+  hand-written `extraKnownMarketplaces` entry with `ref: "stable"` returns only as the fallback when
+  the `claude` CLI is absent, relying on the session-start reconciliation D-015 found. rein-app
+  D-005 (c) is retracted and replaced by: "rein-app does not rely on install-from-settings; it may
+  happen after an authenticated start and is harmless."
+- **Here**: the D-015 suspensions of D-013 (c) and D-014 "not registered" are lifted and both
+  clauses are superseded by this model. Both repos' fixtures assert the same thing: report-only
+  before/after a session start. Q5 closed.
+- **Measurements rein-app wants**, report-only, one CI line each `[FIXTURE_Q5_M<n>] <claude
+  version> <result>`: M1 registration-by-start (unauthenticated; github source once live, directory
+  source meanwhile) — does `known_marketplaces.json` carry ref `stable` and does the clone's HEAD
+  equal `origin/stable`; a mismatch is **silent trunk-tracking and reopens rein-app D-007/D-009 the
+  same day**. M2 install-by-start (authenticated, github source, three fresh config dirs) — count
+  installs, record version and sha. M3 = E-8 (`marketplace add` → ref `stable` in settings AND
+  `known_marketplaces.json`). M4 idempotence — `marketplace add` on an already-reconciled profile
+  exits 0, entry unchanged, no duplicate. M1/M2/M4 are E-9; E-8 gains the `known_marketplaces.json`
+  half of M3.
+- **Source**: rein-app `.ai/DECISIONS.md` D-009.
+
 ## Reserved (awaiting upstream D-###)
-- Q5 → `rein-app · Architect`: re-rule D-005 (c) and D-007 in light of D-015; say what the fixture
-  should measure (GitHub source after the remote has a tag; authenticated sample reproduction).
+- none.

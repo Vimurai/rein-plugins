@@ -81,12 +81,15 @@ MoveRow     { unit, kind: agent|skill|rule, from: rein path, to: plugin, added_b
   never collides with what `rein sync` still provisions.
 
 ## 5. Interface Contracts
-- **To `rein-app`** (rein-app D-002/D-007, mirrored D-006/D-014): the app registers per profile
-  with `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` (a hand-written
-  settings entry is not honoured on Claude Code 2.1.319) and verifies the result, which is
+- **To `rein-app`** (rein-app D-002/D-007/D-009, mirrored D-006/D-014/D-016): the app registers
+  per profile with `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` and
+  installs with `claude plugin install` (primary, verifiable at apply time); a hand-written
+  `extraKnownMarketplaces` entry with `ref: "stable"` is its fallback only when the `claude` CLI is
+  absent, relying on session-start reconciliation (D-015). The resulting JSON is
   `extraKnownMarketplaces.rein-plugins = { source: { source: "github", repo: "Vimurai/rein-plugins",
   ref: "stable" } }`; `enabledPlugins["<plugin>@rein-plugins"] = true` appears for operator-selected
-  plugins only. We assert in CI that the shorthand form yields `ref: "stable"` (E-8). Invariants we owe: the key equals `marketplace.json` `name`; the manifest stays at
+  plugins only. Install-from-settings after an authenticated start may happen and is harmless;
+  neither repo relies on it. We measure M1–M4 (D-016) in CI, report-only: E-8 (M3) and E-9 (M1, M2, M4). Invariants we owe: the key equals `marketplace.json` `name`; the manifest stays at
   the default path; a **`stable` branch** always points at the current release tag's commit.
   `enabledPlugins` **enables, it does not install** (rein-app D-005, mirrored D-013): rein-app runs
   `claude plugin install <plugin>@rein-plugins --scope user` per profile and Claude Code writes the
@@ -154,11 +157,12 @@ retired as DONE with a summary pointing here, so the plan's E-1..E-4 land as **E
 | E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Skips with a named reason only on a missing `claude` CLI or credential, never on a missing rein release (D-012). Acceptance (D-013): shape layer structural; install layer = explicit `claude plugin install` then assert installed + enabled + D-006 shape written, `[FIXTURE_PLUGIN_MISSING]` on a missing bundle; reconcile layer = settings-only start, **report-only** for both registration and install, before and after the start (`[FIXTURE_Q4_OBSERVED]`; D-015 — no failure flip until rein-app re-rules Q5). `rein-data` key prints `[FIXTURE_PENDING]` until E-5. | 2 |
 | — | **E-6** | Make `rein-seo` self-contained (D-011 and its clarification supersede the task text): agents carry a marked mirror of the intent list (named rein commit), call the MCP and report any refusal verbatim, take the blueprint from the consumer project's `.ai/blueprints/`, and report what is missing instead of aborting. Depends on E-3. Acceptance: eval passes with no rein checkout; no `src/` or `~/.rein` path in the bundle. | 2 |
 | — | **E-7** | CI once per PR: restrict the `push` trigger to `main` and `stable` (via `skill: ci_gate`). Tier 1. | 1 |
-| — | **E-8** | GitHub-shorthand registration assertion (D-014): in CI, `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` against the live repo must write `source.ref == "stable"`; `[FIXTURE_REF_MISSING]` otherwise, reported to the Architect for rein-app. Depends on E-4. | 2 |
+| — | **E-8** | GitHub-shorthand registration assertion (D-014, = M3 in D-016): in CI, `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` against the live repo must write `source.ref == "stable"` in settings.json AND in `known_marketplaces.json`; `[FIXTURE_REF_MISSING]` otherwise, reported to the Architect for rein-app. Depends on E-4. | 2 |
+| — | **E-9** | Q5 measurements M1, M2, M4 (D-016), report-only `[FIXTURE_Q5_M<n>]` lines: M1 registration-by-start and clone HEAD == origin/stable (a mismatch = silent trunk-tracking, report same day); M2 install-by-start, authenticated, three fresh dirs; M4 `marketplace add` idempotence. Depends on E-4. | 2 |
 | — | **E-2 add-on** | Release pointer: E-2 creates the `stable` branch alongside the trunk and documents in the README that a release fast-forwards `stable` to the tag and a rollback resets it (D-006). GitHub remote `Vimurai/rein-plugins` is created by the operator, not the agent. | 2 |
 | E-4 | **E-5** | Move group 2 (§2, `rein-ops` extension + `rein-data`), same two-sided protocol as E-3. Acceptance: eval green; MOVES.md rows added; **`rein · Architect`** notified (D-004 supersedes the task text). | 2 |
 
-Dependency chain: E-2 → E-3 → E-5; E-2 → E-4 → E-8; E-3 → E-6. No cycles, depth 2.
+Dependency chain: E-2 → E-3 → E-5; E-2 → E-4 → E-8, E-9; E-3 → E-6. No cycles, depth 2.
 
 ## 10. Open Questions (reserved — do not decide locally)
 - **Q1 — ANSWERED** (rein D-151 → D-004): clean cut at a rein minor, no transition window; see §7.
@@ -169,10 +173,11 @@ All three reserved questions are closed; answers live in `.ai/DECISIONS.md` D-00
 - **Q4 — ANSWERED** (rein-app D-005/D-007 → D-013/D-014): `enabledPlugins` enables only, and a
   hand-written marketplace entry is not registered on 2.1.319; rein-app uses `claude plugin
   marketplace add` and `claude plugin install`; see §5. E-8 proves the shorthand `ref` pin.
-- **Q5 → `rein-app · Architect` (open, D-015)**: a session start DOES register a hand-written
-  marketplace entry, and one authenticated start installed from settings alone. D-013 (c) and
-  D-014 "not registered" are suspended; the reconcile layer reports instead of asserting until
-  rein-app re-rules. Results of every CI run go to `rein-app · Architect`.
+- **Q5 — ANSWERED** (D-015 finding → rein-app D-009 → D-016): a session start registers a
+  hand-written entry and an authenticated start may install from settings; rein-app keeps the
+  explicit CLI flow primary and tolerates install-from-settings. Suspensions lifted; both fixtures
+  are report-only before/after a start. Measurements M1–M4 run in CI (E-8, E-9) and their lines go
+  to `rein-app · Architect`; an M1 HEAD ≠ origin/stable result is reported the same day.
 
 **Standing cross-repo obligations** (Architect-owned):
 - The first release tag is cut after E-3 lands (D-009); when it is on `stable` at

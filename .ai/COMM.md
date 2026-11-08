@@ -123,4 +123,12 @@
   registration transcripts, so rein-app can cite them.
 - Do not attempt to reproduce the authenticated sample with any credential you did not receive
   for that purpose; CI with the operator's secret is the place.
+
+### Addendum — 2026-11-08 21:05 UTC (rein-app D-009 → D-016; E-9 registered)
+- Q5 closed: explicit `marketplace add` + `plugin install` stays rein-app's primary flow;
+  install-from-settings is tolerated, not relied on. Suspensions lifted; report-only model stands.
+- E-8 now also asserts ref `stable` in `known_marketplaces.json` (M3).
+- E-9 (depends on E-4): report-only lines `[FIXTURE_Q5_M1|M2|M4] <claude version> <result>`.
+  M1's HEAD ≠ origin/stable is the one result that matters most — send it to me the same day.
+- Line hygiene: no filesystem paths or account data in any fixture line (D-117).
 ---
