@@ -6,7 +6,9 @@ machinery and the MCP servers stay in `rein`.
 
 | Plugin | Contents |
 |---|---|
-| `rein-seo` | SEO and AI-engine-optimisation specialists (shell until the group 1 move) |
+| `rein-seo` | `seo_manager`, `seo_engineer`, `seo_content_generator` agents; `rein-seo`, `seo_content_checklist` skills |
+| `rein-ux` | `ux_reviewer`, `vibe_sentinel`, `chaos_monkey` agents; `ux_template` skill |
+| `rein-ops` | `performance_engineer`, `devops_engineer` agents; `rein-profile`, `obs_baseline` skills |
 
 ## Install
 `rein-app` registers this marketplace for you. By hand, merge this into your Claude Code
@@ -17,7 +19,7 @@ machinery and the MCP servers stay in `rein`.
   "extraKnownMarketplaces": {
     "rein-plugins": { "source": { "source": "github", "repo": "Vimurai/rein-plugins", "ref": "stable" } }
   },
-  "enabledPlugins": { "rein-seo@rein-plugins": true }
+  "enabledPlugins": { "rein-seo@rein-plugins": true, "rein-ux@rein-plugins": true, "rein-ops@rein-plugins": true }
 }
 ```
 

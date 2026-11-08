@@ -1,0 +1,9 @@
+{
+  "name": "rein-ops",
+  "version": "0.1.0",
+  "description": "Operations specialists for Rein projects: performance, DevOps, profiling, observability.",
+  "author": {
+    "name": "Vimurai"
+  },
+  "license": "Apache-2.0"
+}

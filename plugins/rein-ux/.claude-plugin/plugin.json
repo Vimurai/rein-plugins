@@ -1,0 +1,9 @@
+{
+  "name": "rein-ux",
+  "version": "0.1.0",
+  "description": "UI quality specialists for Rein projects: visual audit, vibe sentinel, chaos testing, UX templates.",
+  "author": {
+    "name": "Vimurai"
+  },
+  "license": "Apache-2.0"
+}

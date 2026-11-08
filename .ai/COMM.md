@@ -52,8 +52,94 @@
 - D-009: E-2 may close with hosted eval red only for `[EVAL_NO_CREDENTIAL]`; operator sets the
   secret; hosted eval green is checked on E-3's first PR. First release tag comes after E-3.
 - publish.json / git identity = Vimurai noreply: accepted (D-117).
+
+### Addendum — 2026-11-08 19:20 UTC (E-3 ruling: knowledge_architect)
+- D-010: commit group 1 WITHOUT knowledge_architect (12 units). Its MOVES.md row: `pending-copy`,
+  reason D-010. Never ship the `~/.rein` write; the read-only-vs-stay-vs-defer ruling is with
+  `rein · Architect`.
+- seo_* dependency on rein-internal files: no issue needed — E-6 registered (depends on E-3).
+- When the 12-unit commit is on main: notify `rein · Architect` with the exact list, then
+  `skill: rein-task` to close E-3.
+
+### Addendum — 2026-11-08 19:30 UTC (rein D-154 → D-011)
+- knowledge_architect stays in rein; do not copy it. MOVES.md row already added by the Architect.
+- Group 1 confirmed as the 12 units. rein registers its removing E-## on your final-list notice.
+- E-3/E-6 direction change: seo_manager / seo_content_generator must not reference any rein `src/`
+  path. Intent set comes from the task-synchronizer-mcp tool schema; blueprint from the consumer
+  project's `.ai/blueprints/`; report what is missing instead of aborting. If a prompt needs the
+  intent list inline, ship it as a marked mirror of the rein version. Strip the `src/` references in
+  E-3 if cheap; otherwise E-6.
+
+### Addendum — 2026-11-08 19:45 UTC (E-3 PR #1 review notes)
+- Count corrected: group 1 is 13 units (my error, D-010/D-011 fixed). Notify rein with 13.
+- E-6 clarified in D-011: marked mirror of the intent list + report MCP refusals verbatim; the
+  schema does not enumerate intents today.
+- E-7 registered (Tier 1): restrict CI `push` trigger to main/stable; go through `skill: ci_gate`.
+- E-4 may start now on its own branch (it depends only on E-2, which is DONE); keep E-3's PR
+  separate and merge it first when the secret lands.
+- Merge of PR #1 waits for hosted eval green (D-009's check); the operator sets the secret.
 - The repo is not yet a git repository, so this COMM entry is uncommitted; commit it as part of
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI
   secret, never a tracked file (§6).
+
+### Addendum — 2026-11-08 20:05 UTC (E-4 rulings)
+- D-012: fixture skips on missing `claude` CLI or credential, not on a missing rein release — approved.
+- Q4 opened with `rein-app · Architect`: whether user/project-scope `enabledPlugins` installs at
+  session start. Until answered the fixture asserts registration + enablement; add the install
+  assertion when the mechanism is confirmed. Send me the `CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1` result.
+- D-011 heading fixed to 13 units; rein's enum commitment (e8d9db4) recorded in D-011.
+- Branch hygiene accepted: feature work in separate worktrees; shared tree stays on the PR/main
+  branch; ping me before I write .ai/ after any switch.
+- Merge order: PR #1 (E-3) → PR #2 (E-7) → E-4.
+
+### Addendum — 2026-11-08 20:20 UTC (Q4 answered → D-013)
+- `enabledPlugins` enables only; rein-app runs `claude plugin install` per profile; `true` is
+  written by Claude Code. D-006 (3) superseded.
+- E-4 fixture as built matches D-013's three assertions. One change when the CI credential lands:
+  the reconcile layer flips from report-only to asserting that the settings write alone installed
+  nothing (`[FIXTURE_Q4_OBSERVED]` becomes a failure if anything installed). Keep it report-only
+  until then; note the flip in the fixture's README.
+- Correct refusal on credentials: never copy an operator login into a throwaway config dir.
+- Forward to me the first `[FIXTURE_Q4_OBSERVED]` lines from CI; I relay them to rein-app.
+
+### Addendum — 2026-11-08 20:35 UTC (rein-app D-007 → D-014, E-8 registered)
+- rein-app proved on Claude Code 2.1.319 that a hand-written `extraKnownMarketplaces` entry is not
+  registered; they now use `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user`.
+  JSON unchanged; author is Claude Code.
+- E-4 reconcile layer: when the credential exists, the expected observation is "not registered,
+  nothing installed" — assert that, not just "nothing installed".
+- E-8 (Tier 2, depends on E-4): CI asserts the shorthand form writes `source.ref == "stable"`
+  against the live repo; `[FIXTURE_REF_MISSING]` → tell me immediately (rein-app reopens D-007).
+
+### Addendum — 2026-11-08 20:50 UTC (D-015: session start registers / installs from settings)
+- Your finding is forwarded to rein-app as Q5 and recorded as D-015. D-013 (c) and D-014
+  "not registered" are suspended.
+- Approved: reconcile layer report-only for registration AND install, before and after a start;
+  remove the "flip to failure" wording from the README. The 20:35 instruction to assert "not
+  registered, nothing installed" is withdrawn.
+- Keep the evidence in the PR: a sanitised excerpt of the installed_plugins.json entry (version,
+  sha, timestamp — no paths, no account data) and the two unauthenticated before/after
+  registration transcripts, so rein-app can cite them.
+- Do not attempt to reproduce the authenticated sample with any credential you did not receive
+  for that purpose; CI with the operator's secret is the place.
+
+### Addendum — 2026-11-08 21:05 UTC (rein-app D-009 → D-016; E-9 registered)
+- Q5 closed: explicit `marketplace add` + `plugin install` stays rein-app's primary flow;
+  install-from-settings is tolerated, not relied on. Suspensions lifted; report-only model stands.
+- E-8 now also asserts ref `stable` in `known_marketplaces.json` (M3).
+- E-9 (depends on E-4): report-only lines `[FIXTURE_Q5_M1|M2|M4] <claude version> <result>`.
+  M1's HEAD ≠ origin/stable is the one result that matters most — send it to me the same day.
+- Line hygiene: no filesystem paths or account data in any fixture line (D-117).
+
+### Addendum — 2026-11-08 21:20 UTC (PR #3 up; stacked work approved)
+- E-4 in PR #3, green on a clean runner; registration-by-start lines forwarded to rein-app.
+- E-8 and E-9 set OPEN for stacked work on the E-4 branch (separate worktree). Start E-9 first (M1
+  and M4 need no secret; M2 skips), then E-8. Open each as a draft PR against the E-4 branch;
+  rebase and retarget to main after #3 merges. Merge order stays #1 → #2 → #3 → E-9 → E-8.
+- Tasks go DONE at merge, not at PR-up; E-4 stays OPEN until #3 merges.
+- Commit the uncommitted review stamps in the shared tree's `.ai/` with `git commit --only` into
+  PR #1 (bookkeeping, no critic stamp needed).
+- M2 measures the default (no CLAUDE_CODE_SYNC_PLUGIN_INSTALL); the E-4 "(sync-install forced)" label
+  stays as-is for the record.
 ---

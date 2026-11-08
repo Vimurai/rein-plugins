@@ -13,6 +13,18 @@
       "source": "./plugins/rein-seo",
       "description": "SEO and AI-engine-optimisation specialists for Rein projects.",
       "version": "0.1.0"
+    },
+    {
+      "name": "rein-ux",
+      "source": "./plugins/rein-ux",
+      "description": "UI quality specialists for Rein projects: visual audit, vibe sentinel, chaos testing, UX templates.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "rein-ops",
+      "source": "./plugins/rein-ops",
+      "description": "Operations specialists for Rein projects: performance, DevOps, profiling, observability.",
+      "version": "0.1.0"
     }
   ]
 }
