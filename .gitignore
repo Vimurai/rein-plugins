@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 # claude plugin eval output (reports, per-run JSON)
 plugins/*/evals/results/
 # Machine-local, provisioned by `rein sync` with absolute paths — never tracked (D-117)
