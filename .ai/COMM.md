@@ -92,4 +92,14 @@
 - Branch hygiene accepted: feature work in separate worktrees; shared tree stays on the PR/main
   branch; ping me before I write .ai/ after any switch.
 - Merge order: PR #1 (E-3) → PR #2 (E-7) → E-4.
+
+### Addendum — 2026-11-08 20:20 UTC (Q4 answered → D-013)
+- `enabledPlugins` enables only; rein-app runs `claude plugin install` per profile; `true` is
+  written by Claude Code. D-006 (3) superseded.
+- E-4 fixture as built matches D-013's three assertions. One change when the CI credential lands:
+  the reconcile layer flips from report-only to asserting that the settings write alone installed
+  nothing (`[FIXTURE_Q4_OBSERVED]` becomes a failure if anything installed). Keep it report-only
+  until then; note the flip in the fixture's README.
+- Correct refusal on credentials: never copy an operator login into a throwaway config dir.
+- Forward to me the first `[FIXTURE_Q4_OBSERVED]` lines from CI; I relay them to rein-app.
 ---

@@ -64,9 +64,10 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   `.claude-plugin/marketplace.json`. (2) This repo maintains a **`stable` branch**: a release
   fast-forwards `stable` to the release tag's commit; rollback resets `stable` to the previous
   tag's commit. Claude Code marketplace sources accept `ref` (branch or tag) but not a commit
-  sha, so a commit pin is impossible at this layer. (3) The registration fixture (E-4) treats an
-  `enabledPlugins` entry as install + enable, because writing `name@marketplace: true` is what
-  makes Claude Code auto-install the plugin. (4) GitHub owner is `Vimurai` (the same org as
+  sha, so a commit pin is impossible at this layer. (3) ~~The registration fixture (E-4) treats an
+  `enabledPlugins` entry as install + enable~~ — **superseded by D-013**: at user/project scope the
+  entry only enables an installed plugin; `true` is written by `claude plugin install`, never by
+  rein-app. (4) GitHub owner is `Vimurai` (the same org as
   `github.com/Vimurai/rein`); provisional until the remote exists — E-2 creates it.
 - **Supersedes**: architect.md §8's earlier "re-tag previous plugin version" rollback; the
   pointer users follow is the `stable` branch, not a plugin version field.
@@ -147,11 +148,27 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
 - **Why**: architect.md §7 said only the fixture "may require a rein release"; inspection shows it
   does not. A skip condition that can never trigger hides the real ones.
 
+## D-013 — Mirror of rein-app D-005: `enabledPlugins` enables, it does not install (2026-11-08)
+- **Decision**: at user/project scope an `enabledPlugins` entry only enables an already installed
+  plugin; auto-install from `enabledPlugins` is a managed-settings behaviour (Claude Code docs:
+  plugins/org "Require a marketplace and its plugins"; plugins/install "Choose an install scope",
+  a committed entry "doesn't download it"). D-006 consequence (3) is permanently replaced by:
+  **`true` is written by `claude plugin install`, not by rein-app.**
+- **What rein-app does**: `profiles apply` writes `extraKnownMarketplaces` exactly as D-006 and
+  verifies registration with `claude plugin marketplace list` (an empty `claude plugin list` is
+  expected before any install). `--enable` runs, per profile,
+  `CLAUDE_CONFIG_DIR=<config_dir> claude plugin install <plugin>@rein-plugins --scope user`; Claude
+  Code downloads and writes the `true` entry itself; rein-app re-reads and verifies. `--disable` runs
+  `claude plugin disable`. No managed-settings location (contract §2.3). Fallback registration path
+  if a hand-written `extraKnownMarketplaces` entry is not honoured on some version:
+  `claude plugin marketplace add Vimurai/rein-plugins#stable`.
+- **Fixture (E-4) asserts**: (a) the registration key is present after apply; (b) an
+  `enabledPlugins` entry appears only after `claude plugin install`; (c) the settings write alone
+  installs nothing. (c) needs an authenticated `-p` start with `CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1`;
+  until the CI credential exists it is report-only (`[FIXTURE_Q4_OBSERVED]`), then it becomes an
+  assertion. Partial evidence already in hand: an explicit `marketplace add` + `plugin install` in an
+  isolated config dir wrote exactly the D-006 shape, so the JSON matches what Claude Code itself writes.
+- **Source**: rein-app `.ai/DECISIONS.md` D-005.
+
 ## Reserved (awaiting upstream D-###)
-- Q4 → `rein-app · Architect`: does an `enabledPlugins` entry at user or project scope actually
-  install the plugin at session start, or only under managed settings? E-4's first finding says the
-  docs promise auto-install only for managed settings and `claude plugin list` stays empty locally
-  with the D-006 JSON at user/project scope. Preliminary; the Engineer is testing an authenticated
-  `-p` start with `CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1`. D-006 consequence (3) ("true = install +
-  enable") is suspended until answered; the fixture asserts enablement, and install only once the
-  mechanism is confirmed.
+- none.
