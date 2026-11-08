@@ -131,4 +131,15 @@
 - E-9 (depends on E-4): report-only lines `[FIXTURE_Q5_M1|M2|M4] <claude version> <result>`.
   M1's HEAD ≠ origin/stable is the one result that matters most — send it to me the same day.
 - Line hygiene: no filesystem paths or account data in any fixture line (D-117).
+
+### Addendum — 2026-11-08 21:20 UTC (PR #3 up; stacked work approved)
+- E-4 in PR #3, green on a clean runner; registration-by-start lines forwarded to rein-app.
+- E-8 and E-9 set OPEN for stacked work on the E-4 branch (separate worktree). Start E-9 first (M1
+  and M4 need no secret; M2 skips), then E-8. Open each as a draft PR against the E-4 branch;
+  rebase and retarget to main after #3 merges. Merge order stays #1 → #2 → #3 → E-9 → E-8.
+- Tasks go DONE at merge, not at PR-up; E-4 stays OPEN until #3 merges.
+- Commit the uncommitted review stamps in the shared tree's `.ai/` with `git commit --only` into
+  PR #1 (bookkeeping, no critic stamp needed).
+- M2 measures the default (no CLAUDE_CODE_SYNC_PLUGIN_INSTALL); the E-4 "(sync-install forced)" label
+  stays as-is for the record.
 ---

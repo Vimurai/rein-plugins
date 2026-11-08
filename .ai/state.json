@@ -131,6 +131,42 @@
       "ready": true,
       "blocked_by": [],
       "updated_at": "2026-11-08T19:18:25.598Z"
+    },
+    {
+      "id": "E-8",
+      "owner": "Engineer (Claude)",
+      "status": "OPEN",
+      "tier": 2,
+      "description": "Add the GitHub-shorthand registration assertion to the E-4 fixture per .ai/architect.md §5, §9 and D-014: in CI (network available, isolated CLAUDE_CONFIG_DIR), run `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` against the live public repo and assert the written settings.json has extraKnownMarketplaces[\"rein-plugins\"].source.ref == \"stable\" and source.repo == \"Vimurai/rein-plugins\"; fail with a named reason [FIXTURE_REF_MISSING] if ref is absent, and report the result to the Architect (rein-app reopens its D-007 on that signal). Skip with [FIXTURE_SKIP_NO_NETWORK] when offline. Go through skill: ci_gate if the workflow file changes. Acceptance: assertion passes in CI against the live repo; the failure path is exercised with a bogus ref in a unit test.",
+      "created_at": "2026-11-08T19:35:25.165Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-4"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-4"
+      ],
+      "updated_at": "2026-11-08T19:45:08.546Z"
+    },
+    {
+      "id": "E-9",
+      "owner": "Engineer (Claude)",
+      "status": "OPEN",
+      "tier": 2,
+      "description": "Add rein-app's Q5 measurements to the E-4 fixture per .ai/architect.md §9 and D-016, report-only, one CI line each in the form `[FIXTURE_Q5_M<n>] <claude version> <result>`: M1 registration-by-start, unauthenticated, github source Vimurai/rein-plugins with ref \"stable\" (directory source until the remote has a tag) — after one `claude -p` start, does known_marketplaces.json carry ref \"stable\" and does the marketplace clone's HEAD equal origin/stable (a mismatch means silent trunk-tracking: tell the Architect the same day); M2 install-by-start, authenticated (CI secret), github source, three fresh config dirs holding only enabledPlugins {\"rein-seo@rein-plugins\": true} — count installs, record version and sha; M4 idempotence — `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` on a profile the session-start reconciler already registered exits 0, entry unchanged, no duplicate. (M3 is E-8.) Skips: [FIXTURE_SKIP_NO_CREDENTIAL] for M2, [FIXTURE_SKIP_NO_NETWORK] offline. Acceptance: all three lines appear in a CI run with the secret set; M2 skips cleanly without it; no filesystem path or account data in any line.",
+      "created_at": "2026-11-08T19:41:36.421Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-4"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-4"
+      ],
+      "updated_at": "2026-11-08T19:45:07.985Z"
     }
   ],
   "stamps": [
@@ -192,6 +228,51 @@
       "timestamp": "2026-11-08T19:07:42.704Z",
       "summary": "[TIER_2] E-3 Blueprint aligned (ALIGN_PASS re-review) + clean-code gate clear (CLEAN_PASS stands; fixes since were .md-only) — 0 warnings ignored; open note: Architect to correct group-1 count 12 -> 13 in D-010/D-011/architect.md §2",
       "sha": "49a6c9d7987d7cd5894f5944a98e3605ea3997ed",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "ALIGN_PASS",
+      "agent": "rein-review-tier2",
+      "task_id": "E-4",
+      "timestamp": "2026-11-08T19:33:39.554Z",
+      "summary": "[TIER_2] E-4 (worktree engineer/e4-registration-fixture): fixture matches architect.md §3.5/§5/§9 E-4 row, D-006 literal verbatim, D-012 skip conditions (no claude / no credential, no rein release), reconcile layer report-only per Q4; ci_gate DEVOPS.md entry present. Verified locally: install layer OK, missing bundle -> [FIXTURE_PLUGIN_MISSING] exit 1, no claude -> named skip.",
+      "sha": "859f9d1c5497630e45ea96b366b5ce3f0d6fb4ea",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CLEAN_WARN",
+      "agent": "critic_clean_code",
+      "task_id": "E-4",
+      "timestamp": "2026-11-08T19:33:41.811Z",
+      "summary": "[TIER_2] E-4: standards-checker 0 errors / 0 warnings on 4 staged files. Review warnings: (P1) empty marketplace.json plugins -> [FIXTURE_OK] asserting nothing, needs a bundles>=1 floor (Q#5); (P1) mkdtemp profiles never removed, leak per run (Q#3); (P2) reconcile plugin_errors fails run vs report-only header; (P2) full process.env inherited by claude; (P3) [FIXTURE_OK] printed after NO_CLAUDE skip.",
+      "sha": "859f9d1c5497630e45ea96b366b5ce3f0d6fb4ea",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "ALIGN_PASS",
+      "agent": "rein-review-tier2",
+      "task_id": "E-4",
+      "timestamp": "2026-11-08T19:38:47.363Z",
+      "summary": "[TIER_2] E-4 fixture re-review: matches architect.md §9 E-4 row (D-006/D-012/D-013); prior P1-1..P3-5 fixes verified (local run exit 0, 0 temp leftovers). Warnings: reconcile layer does not yet observe registration (D-014 'nothing registered'); DEVOPS.md/ci.yml still say 'until Q4' (answered).",
+      "sha": "e93bd63e91b301817000e2e6667d52f0e7ad049b",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CLEAN_WARN",
+      "agent": "rein-review-tier2",
+      "task_id": "E-4",
+      "timestamp": "2026-11-08T19:38:49.184Z",
+      "summary": "[TIER_2] fixture.mjs 145 lines, no secrets, env stripped, cleanup registered before mkdtemp. Warn: [FIXTURE_INSTALL] emitted but missing from README/DEVOPS/header failure lists; stale 'until Q4 (D-012)' wording in DEVOPS.md row and ci.yml comment; assertion (b) 'only after install' marked enforced but pre-install absence not checked.",
+      "sha": "e93bd63e91b301817000e2e6667d52f0e7ad049b",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CRITIC_STAMP",
+      "agent": "rein-review",
+      "task_id": "E-4",
+      "timestamp": "2026-11-08T19:42:57.825Z",
+      "summary": "[TIER_2] E-4 registration fixture: re-review #3 ALIGN_PASS + CLEAN_WARN; W1 (secret comment) fixed, W2 labelled (sync-install forced), W3 (Q4→Q5 marker rename) deferred to E-9",
+      "sha": "9adbe299d20a79a657d0656853f0345afbc93907",
       "author": "32126521+Vimurai@users.noreply.github.com"
     }
   ],
