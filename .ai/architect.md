@@ -33,6 +33,13 @@ turns on together. Granularity is the bundle, never the file. Initial bundles:
 Group 3 (project templates for `rein init`) is deferred until `rein-app` can select a template at
 init; no bundle is defined for it yet.
 
+Notes on group 1 (D-010): `knowledge_architect` is held out of E-3 — its body writes `~/.rein`,
+which §6 forbids; it moves only read-only and only after `rein · Architect` rules. `seo_manager` /
+`seo_content_generator` depend on rein-internal files (`seo-cluster-intents.mjs`, the
+seo-keyword-multiplier blueprint); E-6 makes `rein-seo` self-contained by shipping that data inside
+the plugin. Plugin-local data a moved unit needs travels with the unit; only gate/hook logic is
+barred from this tree.
+
 **Never in this repo** (contract §4, plan "What stays"): the safe-exec gate and every hook
 `rein doctor` audits; `rein-preflight`, `rein-handoff`, `rein-task`, `arch-task`, `task-planner`,
 `decision-recorder`, `blueprint-writer`, the four critics, `rein-review`, `rein-test`,
@@ -138,10 +145,11 @@ retired as DONE with a summary pointing here, so the plan's E-1..E-4 land as **E
 | E-1 | **E-2** | Marketplace skeleton: `marketplace.json`, one empty plugin (`rein-seo` shell) with `plugin.json`, CI running `claude plugin eval` per plugin + publish scan + manifest/name-collision checks; `git init` the repo. Acceptance (amended D-009): hosted checks + publish-scan green; local `claude plugin eval` passes; hosted eval may fail only with `[EVAL_NO_CREDENTIAL]` until the operator sets the secret; `LICENSE` + `license` fields present (D-008). | 2 |
 | E-2 | **E-3** | Move group 1 (§2, `rein-seo`, `rein-ux`, `rein-ops` core): copy from `rein`, eval each bundle, start `.ai/MOVES.md` rows with `removed_by: pending`, then notify **`rein · Architect`** with the unit list so `rein` files its removing E-## (D-004 supersedes the task text that says `rein · Engineer`). Acceptance: all three bundles pass eval; MOVES.md lists every unit; no name changed. | 2 |
 | E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Acceptance: fixture installs every bundle and fails clearly on a missing one. | 2 |
+| — | **E-6** | Make `rein-seo` self-contained: ship cluster-intents data inside the plugin, scaffold or soft-fail the blueprint dependency (D-010). Depends on E-3. Acceptance: eval passes with no rein checkout; no `src/` or `~/.rein` path in the bundle. | 2 |
 | — | **E-2 add-on** | Release pointer: E-2 creates the `stable` branch alongside the trunk and documents in the README that a release fast-forwards `stable` to the tag and a rollback resets it (D-006). GitHub remote `Vimurai/rein-plugins` is created by the operator, not the agent. | 2 |
 | E-4 | **E-5** | Move group 2 (§2, `rein-ops` extension + `rein-data`), same two-sided protocol as E-3. Acceptance: eval green; MOVES.md rows added; **`rein · Architect`** notified (D-004 supersedes the task text). | 2 |
 
-Dependency chain: E-2 → E-3 → E-5; E-2 → E-4. No cycles, depth 2.
+Dependency chain: E-2 → E-3 → E-5; E-2 → E-4; E-3 → E-6. No cycles, depth 2.
 
 ## 10. Open Questions (reserved — do not decide locally)
 - **Q1 — ANSWERED** (rein D-151 → D-004): clean cut at a rein minor, no transition window; see §7.

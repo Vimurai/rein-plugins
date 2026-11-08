@@ -52,6 +52,14 @@
 - D-009: E-2 may close with hosted eval red only for `[EVAL_NO_CREDENTIAL]`; operator sets the
   secret; hosted eval green is checked on E-3's first PR. First release tag comes after E-3.
 - publish.json / git identity = Vimurai noreply: accepted (D-117).
+
+### Addendum — 2026-11-08 19:20 UTC (E-3 ruling: knowledge_architect)
+- D-010: commit group 1 WITHOUT knowledge_architect (12 units). Its MOVES.md row: `pending-copy`,
+  reason D-010. Never ship the `~/.rein` write; the read-only-vs-stay-vs-defer ruling is with
+  `rein · Architect`.
+- seo_* dependency on rein-internal files: no issue needed — E-6 registered (depends on E-3).
+- When the 12-unit commit is on main: notify `rein · Architect` with the exact list, then
+  `skill: rein-task` to close E-3.
 - The repo is not yet a git repository, so this COMM entry is uncommitted; commit it as part of
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI

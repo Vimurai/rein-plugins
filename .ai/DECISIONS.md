@@ -98,5 +98,18 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   after E-3 lands (an empty marketplace is not a release); until then `stable` tracks an untagged
   commit and rein-app is not pinged.
 
+## D-010 — knowledge_architect held out of E-3; moved only read-only after rein rules (2026-11-08)
+- **Decision**: knowledge_architect's body writes `~/.rein/memory-palace.md` (Memory Palace
+  Maintenance) and reads `~/.rein/memory-palace.embeddings.json` directly, conflicting with
+  contract §4 and architect.md §6. It is excluded from the E-3 commit; the other 12 group-1 units
+  ship. Its MOVES.md row reads `pending-copy` with this D-### as the reason. The ruling on how it
+  moves (read-only with the write dropped, stays in rein, or deferred until memory-manager-mcp
+  exposes the palace) is rein's and was asked of `rein · Architect`; a plugin may not carry the write
+  under any outcome.
+- **Why**: the write violates the hard rule; a read-only move is the likely outcome, but bodies are
+  byte-identical copies today and editing one during a move is a contract interpretation rein owns.
+- **Also**: seo_content_generator / seo_manager depend on rein-internal files; E-6 makes the
+  rein-seo bundle self-contained. Pre-existing behaviour, so not an E-3 blocker.
+
 ## Reserved (awaiting upstream D-###)
-- none.
+- knowledge_architect disposition → `rein · Architect` (asked 2026-11-08).

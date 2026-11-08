@@ -39,21 +39,21 @@
     {
       "id": "E-2",
       "owner": "Engineer (Claude)",
-      "status": "OPEN",
+      "status": "DONE",
       "tier": 2,
       "description": "Build the marketplace skeleton per .ai/architect.md §3, §9 (plan E-1): git init the repo; create .claude-plugin/marketplace.json (name rein-plugins) and one empty plugin plugins/rein-seo/.claude-plugin/plugin.json; add CI that runs `claude plugin eval` per plugin, the rein publish scan (pinned rein release tarball, no vendored logic), a manifest↔plugins consistency check and an intra-repo skill/agent name-collision check. Acceptance: CI green on the empty plugin; `claude plugin eval` passes; scan reports zero hits; no operator name, login or path in any tracked file.",
       "created_at": "2026-11-08T18:45:44.830Z",
-      "completed_at": null,
-      "summary": null,
+      "completed_at": "2026-11-08T19:01:26.817Z",
+      "summary": "Marketplace skeleton live at github.com/Vimurai/rein-plugins (main=stable=02987aa): marketplace.json, rein-seo shell + regex load-smoke eval, scripts/check-marketplace.mjs (manifest …[full in LOG.md]",
       "depends_on": [],
       "ready": true,
       "blocked_by": [],
-      "updated_at": "2026-11-08T18:45:44.833Z"
+      "updated_at": "2026-11-08T19:01:26.817Z"
     },
     {
       "id": "E-3",
       "owner": "Engineer (Claude)",
-      "status": "BLOCKED",
+      "status": "OPEN",
       "tier": 2,
       "description": "Move group 1 domain specialists from rein per .ai/architect.md §2, §5, §9 (plan E-2): copy seo_manager, seo_engineer, seo_content_generator, rein-seo, seo_content_checklist into plugins/rein-seo; ux_reviewer, vibe_sentinel, chaos_monkey, ux_template into plugins/rein-ux; performance_engineer, devops_engineer, knowledge_architect, rein-profile, obs_baseline into plugins/rein-ops. Keep every skill/agent name unchanged (D-055). Add an eval suite per bundle and a row per unit in .ai/MOVES.md (removed_by: pending). Then SendMessage `rein · Engineer` with the exact unit list so rein files its removing E-## and updates the D-076 allowlist. Acceptance: all three bundles pass `claude plugin eval`; publish scan zero hits; MOVES.md lists every unit; rein · Engineer notified.",
       "created_at": "2026-11-08T18:46:12.944Z",
@@ -62,16 +62,14 @@
       "depends_on": [
         "E-2"
       ],
-      "ready": false,
-      "blocked_by": [
-        "E-2"
-      ],
-      "updated_at": "2026-11-08T18:46:12.944Z"
+      "ready": true,
+      "blocked_by": [],
+      "updated_at": "2026-11-08T19:01:26.821Z"
     },
     {
       "id": "E-4",
       "owner": "Engineer (Claude)",
-      "status": "BLOCKED",
+      "status": "OPEN",
       "tier": 2,
       "description": "Build the rein-app registration fixture per .ai/architect.md §3.5, §5, §9 (plan E-3): a test that installs the marketplace into a throwaway Claude workspace using the exact extraKnownMarketplaces entry and enabledPlugins map the rein-app Architect specifies (recorded as a D-### in .ai/DECISIONS.md — Q3 in architect.md §10; if not yet recorded when you reach this task, stop and ask the Architect, do not guess the shape). Acceptance: fixture installs every bundle listed in marketplace.json and fails with a named reason on a missing one; runs in CI; skips with a named reason when no rein release is available.",
       "created_at": "2026-11-08T18:46:16.617Z",
@@ -80,11 +78,9 @@
       "depends_on": [
         "E-2"
       ],
-      "ready": false,
-      "blocked_by": [
-        "E-2"
-      ],
-      "updated_at": "2026-11-08T18:46:16.618Z"
+      "ready": true,
+      "blocked_by": [],
+      "updated_at": "2026-11-08T19:01:26.823Z"
     },
     {
       "id": "E-5",
@@ -103,6 +99,24 @@
         "E-3"
       ],
       "updated_at": "2026-11-08T18:46:23.019Z"
+    },
+    {
+      "id": "E-6",
+      "owner": "Engineer (Claude)",
+      "status": "BLOCKED",
+      "tier": 2,
+      "description": "Make the rein-seo bundle self-contained per .ai/architect.md §2 note and D-010: seo_content_generator and seo_manager currently abort unless rein-internal files exist (src/shared/seo-cluster-intents.mjs, .ai/blueprints/seo-keyword-multiplier.md). Ship the cluster-intents data inside plugins/rein-seo (as plugin-local data the agents resolve relative to the plugin root, not a rein path) and either ship the blueprint as a plugin template the agents scaffold into .ai/blueprints/ on first use or make its absence a clear, non-fatal prompt to the operator. Coordinate the intents move with rein · Architect (it is a group-1 dependency rein removes on its side). Acceptance: rein-seo eval passes in a workspace with no rein source checkout; no path under src/ or ~/.rein referenced by the bundle; MOVES.md row for seo-cluster-intents added.",
+      "created_at": "2026-11-08T19:03:02.574Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-3"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-3"
+      ],
+      "updated_at": "2026-11-08T19:03:02.575Z"
     }
   ],
   "stamps": [
