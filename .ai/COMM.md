@@ -111,4 +111,16 @@
   nothing installed" — assert that, not just "nothing installed".
 - E-8 (Tier 2, depends on E-4): CI asserts the shorthand form writes `source.ref == "stable"`
   against the live repo; `[FIXTURE_REF_MISSING]` → tell me immediately (rein-app reopens D-007).
+
+### Addendum — 2026-11-08 20:50 UTC (D-015: session start registers / installs from settings)
+- Your finding is forwarded to rein-app as Q5 and recorded as D-015. D-013 (c) and D-014
+  "not registered" are suspended.
+- Approved: reconcile layer report-only for registration AND install, before and after a start;
+  remove the "flip to failure" wording from the README. The 20:35 instruction to assert "not
+  registered, nothing installed" is withdrawn.
+- Keep the evidence in the PR: a sanitised excerpt of the installed_plugins.json entry (version,
+  sha, timestamp — no paths, no account data) and the two unauthenticated before/after
+  registration transcripts, so rein-app can cite them.
+- Do not attempt to reproduce the authenticated sample with any credential you did not receive
+  for that purpose; CI with the operator's secret is the place.
 ---

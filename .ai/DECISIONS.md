@@ -185,5 +185,28 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   `rein-app · Architect` at once — their exit-7 guard fires and they reopen D-007.
 - **Source**: rein-app `.ai/DECISIONS.md` D-007.
 
+## D-015 — Empirical correction to D-013/D-014: session start registers, and an authenticated start installs, from settings alone (2026-11-08)
+- **Observation** (Claude Code 2.1.319, isolated `CLAUDE_CONFIG_DIR`, settings.json holding only the
+  D-006 shape with `source: directory` and `enabledPlugins {"rein-seo@rein-plugins": true}`):
+  1. before any start, `claude plugin marketplace list --json` is `[]` — this is what rein-app's
+     D-007 measured; 2. after one `claude -p` start the marketplace IS registered
+     (`known_marketplaces.json` written), even when the start fails "Not logged in" — reproduced
+     twice; 3. one authenticated start installed `rein-seo@rein-plugins` into
+     `installed_plugins.json` from settings alone, without `CLAUDE_CODE_SYNC_PLUGIN_INSTALL`
+     (version 0.1.0, sha 02987aa, 19:35:57Z) — single sample, from a reviewer subagent whose
+     environment had inherited a credential; not reproduced by the Engineer, who has no credential.
+- **Caveats**: directory source only; GitHub source untested; one authenticated sample.
+- **Decision**: D-013 assertion (c) and D-014's "not registered" are **suspended**. The E-4
+  reconcile layer is report-only for BOTH registration and install, measured before and after a
+  start; the "flip to failure if anything installed" wording is removed from the fixture README.
+  The unauthenticated before/after registration lines run in CI with no secret and give rein-app
+  data on every PR. Forwarded to `rein-app · Architect` as Q5; their D-005/D-007 and exit-7 guard
+  are theirs to re-rule. Our contract to rein-app is unchanged: the JSON shape and the `stable`
+  pointer. Registration timing is Claude Code's behaviour, not ours.
+- **Why it matters**: rein-app's flow ("write settings, then `claude plugin install`") still works;
+  what changes is the claim that a settings write alone is inert, which any authenticated session
+  start seems to falsify.
+
 ## Reserved (awaiting upstream D-###)
-- none.
+- Q5 → `rein-app · Architect`: re-rule D-005 (c) and D-007 in light of D-015; say what the fixture
+  should measure (GitHub source after the remote has a tag; authenticated sample reproduction).
