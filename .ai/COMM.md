@@ -45,6 +45,13 @@
 - **E-2 add-on**: create a `stable` branch next to the trunk and document the release/rollback
   pointer rule in the README (architect.md §9 last row, §8). Do not create the GitHub remote
   yourself; the operator does.
+
+### Addendum — 2026-11-08 19:10 UTC (E-2 review rulings)
+- D-007: collision check ignoring kind — approved as built.
+- D-008: add `"license": "Apache-2.0"` to every plugin.json and a root `LICENSE`; do this inside E-2.
+- D-009: E-2 may close with hosted eval red only for `[EVAL_NO_CREDENTIAL]`; operator sets the
+  secret; hosted eval green is checked on E-3's first PR. First release tag comes after E-3.
+- publish.json / git identity = Vimurai noreply: accepted (D-117).
 - The repo is not yet a git repository, so this COMM entry is uncommitted; commit it as part of
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI

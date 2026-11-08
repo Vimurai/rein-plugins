@@ -97,14 +97,16 @@ MoveRow     { unit, kind: agent|skill|rule, from: rein path, to: plugin, added_b
   or a non-Bash matcher, and is documented in that plugin's README.
 - **Privacy (D-117)**: the rein publish scan runs in CI; no operator name, login or filesystem path
   appears in a tracked file. Agent and skill bodies copied from `rein` are scanned on arrival.
-- **Secrets**: none required. CI needs no token beyond what `claude plugin eval` needs to run
-  headless; if that requires an API key it is a CI secret, never a tracked file.
+- **Secrets**: `claude plugin eval` in hosted CI needs `ANTHROPIC_API_KEY` as a repo secret, set by
+  the operator, never a tracked file. Without it the eval job reports `[EVAL_NO_CREDENTIAL]`.
+- **License**: Apache-2.0 in every `plugin.json` and a root `LICENSE`, matching rein (D-008).
+- **Identity**: `.ai/publish.json` and the repo's git identity use the Vimurai noreply identity (D-117).
 
 ## 7. Execution Constraints
 - CI must finish inside a normal PR budget: evals run per plugin in parallel; the publish scan and
   manifest checks are single-pass.
 - Name-collision guard: CI lists every skill/agent name in `plugins/**` and fails on duplicates
-  within this repo. Cross-repo rule (rein D-151, mirrored D-004): **no transition window** — before
+  within this repo, ignoring kind — a skill and an agent sharing a name collide (D-007). Cross-repo rule (rein D-151, mirrored D-004): **no transition window** — before
   rein's tag a moved unit exists only in rein's tree; after the tag only here. Claude Code namespaces
   plugin units as `<plugin>:<name>`, so a window would leave two copies under two names with one
   stale. Migration aid is rein's: `rein sync` prunes the stale provisioned copy via its sync manifest
@@ -133,7 +135,7 @@ retired as DONE with a summary pointing here, so the plan's E-1..E-4 land as **E
 
 | Plan | Here | Scope | Tier |
 |---|---|---|---|
-| E-1 | **E-2** | Marketplace skeleton: `marketplace.json`, one empty plugin (`rein-seo` shell) with `plugin.json`, CI running `claude plugin eval` per plugin + publish scan + manifest/name-collision checks; `git init` the repo. Acceptance: CI green on an empty plugin; `claude plugin eval` passes; scan reports zero hits. | 2 |
+| E-1 | **E-2** | Marketplace skeleton: `marketplace.json`, one empty plugin (`rein-seo` shell) with `plugin.json`, CI running `claude plugin eval` per plugin + publish scan + manifest/name-collision checks; `git init` the repo. Acceptance (amended D-009): hosted checks + publish-scan green; local `claude plugin eval` passes; hosted eval may fail only with `[EVAL_NO_CREDENTIAL]` until the operator sets the secret; `LICENSE` + `license` fields present (D-008). | 2 |
 | E-2 | **E-3** | Move group 1 (§2, `rein-seo`, `rein-ux`, `rein-ops` core): copy from `rein`, eval each bundle, start `.ai/MOVES.md` rows with `removed_by: pending`, then notify **`rein · Architect`** with the unit list so `rein` files its removing E-## (D-004 supersedes the task text that says `rein · Engineer`). Acceptance: all three bundles pass eval; MOVES.md lists every unit; no name changed. | 2 |
 | E-3 | **E-4** | Registration fixture: install the marketplace into a throwaway Claude workspace with the exact `extraKnownMarketplaces` + `enabledPlugins` JSON in D-006 (Q3 answered; the "stop and ask" clause in the task text is satisfied). The fixture may point `source` at the local checkout where the GitHub form needs network; the GitHub form is asserted structurally. Acceptance: fixture installs every bundle and fails clearly on a missing one. | 2 |
 | — | **E-2 add-on** | Release pointer: E-2 creates the `stable` branch alongside the trunk and documents in the README that a release fast-forwards `stable` to the tag and a rollback resets it (D-006). GitHub remote `Vimurai/rein-plugins` is created by the operator, not the agent. | 2 |
@@ -149,8 +151,10 @@ Dependency chain: E-2 → E-3 → E-5; E-2 → E-4. No cycles, depth 2.
 All three reserved questions are closed; answers live in `.ai/DECISIONS.md` D-004..D-006.
 
 **Standing cross-repo obligations** (Architect-owned):
-- When the first release tag lands on `stable` at `Vimurai/rein-plugins`, notify `rein-app · Architect`
-  so they lift the "remote not live" risk; until then their tests use a fixture, never the live URL.
+- The first release tag is cut after E-3 lands (D-009); when it is on `stable` at
+  `Vimurai/rein-plugins`, notify `rein-app · Architect` so they lift the "remote not live" risk;
+  until then their tests use a fixture, never the live URL.
+- Operator actions outstanding: set the `ANTHROPIC_API_KEY` repo secret for hosted eval.
 - When E-3 / E-5 copies land, notify `rein · Architect` with the unit list (D-004).
 
 ## 11. Development Cycle

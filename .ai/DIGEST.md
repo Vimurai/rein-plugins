@@ -15,8 +15,9 @@
   registration fixture (blocked on Q3) → E-5 move group 2 (rein-ops ext, rein-data).
 - Decisions: D-001..D-006 (Q1–Q3 all answered: clean-cut moves, gate-adjacent agents stay,
   rein-app registers `Vimurai/rein-plugins` at `ref: stable`). `stable` branch = release pointer.
-- Known risks: GitHub remote not yet created (operator action); `claude plugin eval` CI auth needs
-  confirming in E-2.
+- Repo live: github.com/Vimurai/rein-plugins (main 4b36b2d, stable 72b579e, untagged). E-2 built;
+  closes under D-009 once LICENSE/license fields land.
+- Known risks: hosted eval red until the operator sets the `ANTHROPIC_API_KEY` repo secret.
 - Pending pings (Architect): rein-app · Architect when the first tag is on `stable`; rein · Architect
   when E-3 / E-5 copies land.
 - Hard rules: no writes to ~/.rein or profile hooks/autoMode/permissions/defaultMode; no PreToolUse on

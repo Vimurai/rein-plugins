@@ -72,5 +72,31 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
   pointer users follow is the `stable` branch, not a plugin version field.
 - **Source**: rein-app `.ai/DECISIONS.md` D-002.
 
+## D-007 — Name-collision check ignores kind (2026-11-08)
+- **Decision**: CI treats a skill and an agent with the same name as a collision. Approved as
+  implemented in E-2.
+- **Why**: D-055's discipline is about names in a shared `.claude/` tree; Claude Code namespaces
+  plugin units as `<plugin>:<name>`, and a same-named skill/agent pair is ambiguous to a human
+  invoking either. One namespace is simpler to reason about than two.
+- **Rejected**: per-kind namespaces.
+
+## D-008 — License is Apache-2.0, matching rein (2026-11-08)
+- **Decision**: every `plugin.json` carries `"license": "Apache-2.0"` and the repo root carries a
+  `LICENSE` file with the Apache-2.0 text. Added to E-2 before it closes.
+- **Why**: the bundles are copies of Apache-2.0 material from `rein`; a different or missing license
+  would make each move a relicensing question.
+
+## D-009 — E-2 acceptance amended: hosted eval may be red only for a missing CI secret (2026-11-08)
+- **Decision**: E-2 may be marked DONE when local `claude plugin eval` passes, hosted checks and
+  publish-scan pass, and the only hosted failure is `[EVAL_NO_CREDENTIAL]` (the `ANTHROPIC_API_KEY`
+  repo secret unset). Setting the secret is an operator action; hosted eval green is then verified
+  on E-3's first PR, whose acceptance already requires eval to pass.
+- **Why**: blocking the whole queue on an operator-side secret stalls the loop for no engineering
+  reason; the evidence that the eval works (local 1.00) exists.
+- **Also recorded**: `.ai/publish.json` uses the Vimurai noreply identity and the local git identity
+  matches — consistent with D-117 (no operator name in tracked files). The first release tag is cut
+  after E-3 lands (an empty marketplace is not a release); until then `stable` tracks an untagged
+  commit and rein-app is not pinged.
+
 ## Reserved (awaiting upstream D-###)
 - none.
