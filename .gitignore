@@ -1,0 +1,10 @@
+node_modules/
+# claude plugin eval output (reports, per-run JSON)
+plugins/*/evals/results/
+# Machine-local, provisioned by `rein sync` with absolute paths — never tracked (D-117)
+.claude/settings.json
+*.local.json
+.env*
+!.env.example
+# CI scratch: the pinned rein release the publish scan runs from (D-003)
+.rein-release/

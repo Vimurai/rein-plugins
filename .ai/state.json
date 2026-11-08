@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "project": {
+    "current_tier": 2,
+    "release_verdict": null,
+    "focus": "Bootstrap the rein-plugins Claude Code marketplace: skeleton + CI (E-2), move group 1 specialists from rein (E-3), rein-app registration fixture (E-4), move group 2 (E-5).",
+    "rein_version": "0.4.0",
+    "provisioned_at": "2026-11-08T18:38:55.173Z"
+  },
+  "tasks": [
+    {
+      "id": "P-1",
+      "owner": "Architect (claude·fable)",
+      "status": "DONE",
+      "tier": null,
+      "description": "Define initial blueprint in architect.md",
+      "created_at": "2026-11-08T18:38:55.026Z",
+      "completed_at": "2026-11-08T18:46:25.033Z",
+      "summary": "Wrote .ai/architect.md from rein's ecosystem contract (D-150) and rein-plugins plan: bundles, components, data model, contracts, security rules, rollback, bootstrap E-2..E-5, reserve …[full in LOG.md]",
+      "depends_on": [],
+      "ready": true,
+      "blocked_by": [],
+      "updated_at": "2026-11-08T18:46:25.033Z"
+    },
+    {
+      "id": "E-1",
+      "owner": "Engineer (Claude)",
+      "status": "DONE",
+      "tier": null,
+      "description": "Implement first feature (wait for P-1)",
+      "created_at": "2026-11-08T18:38:55.026Z",
+      "completed_at": "2026-11-08T18:45:46.488Z",
+      "summary": "Retired rein-init placeholder — no work done under this ID. The bootstrap queue is E-2..E-5 per .ai/architect.md §9 (plan E-1..E-4 shifted by one).",
+      "depends_on": [],
+      "ready": true,
+      "blocked_by": [],
+      "updated_at": "2026-11-08T18:45:46.488Z"
+    },
+    {
+      "id": "E-2",
+      "owner": "Engineer (Claude)",
+      "status": "OPEN",
+      "tier": 2,
+      "description": "Build the marketplace skeleton per .ai/architect.md §3, §9 (plan E-1): git init the repo; create .claude-plugin/marketplace.json (name rein-plugins) and one empty plugin plugins/rein-seo/.claude-plugin/plugin.json; add CI that runs `claude plugin eval` per plugin, the rein publish scan (pinned rein release tarball, no vendored logic), a manifest↔plugins consistency check and an intra-repo skill/agent name-collision check. Acceptance: CI green on the empty plugin; `claude plugin eval` passes; scan reports zero hits; no operator name, login or path in any tracked file.",
+      "created_at": "2026-11-08T18:45:44.830Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [],
+      "ready": true,
+      "blocked_by": [],
+      "updated_at": "2026-11-08T18:45:44.833Z"
+    },
+    {
+      "id": "E-3",
+      "owner": "Engineer (Claude)",
+      "status": "BLOCKED",
+      "tier": 2,
+      "description": "Move group 1 domain specialists from rein per .ai/architect.md §2, §5, §9 (plan E-2): copy seo_manager, seo_engineer, seo_content_generator, rein-seo, seo_content_checklist into plugins/rein-seo; ux_reviewer, vibe_sentinel, chaos_monkey, ux_template into plugins/rein-ux; performance_engineer, devops_engineer, knowledge_architect, rein-profile, obs_baseline into plugins/rein-ops. Keep every skill/agent name unchanged (D-055). Add an eval suite per bundle and a row per unit in .ai/MOVES.md (removed_by: pending). Then SendMessage `rein · Engineer` with the exact unit list so rein files its removing E-## and updates the D-076 allowlist. Acceptance: all three bundles pass `claude plugin eval`; publish scan zero hits; MOVES.md lists every unit; rein · Engineer notified.",
+      "created_at": "2026-11-08T18:46:12.944Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-2"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-2"
+      ],
+      "updated_at": "2026-11-08T18:46:12.944Z"
+    },
+    {
+      "id": "E-4",
+      "owner": "Engineer (Claude)",
+      "status": "BLOCKED",
+      "tier": 2,
+      "description": "Build the rein-app registration fixture per .ai/architect.md §3.5, §5, §9 (plan E-3): a test that installs the marketplace into a throwaway Claude workspace using the exact extraKnownMarketplaces entry and enabledPlugins map the rein-app Architect specifies (recorded as a D-### in .ai/DECISIONS.md — Q3 in architect.md §10; if not yet recorded when you reach this task, stop and ask the Architect, do not guess the shape). Acceptance: fixture installs every bundle listed in marketplace.json and fails with a named reason on a missing one; runs in CI; skips with a named reason when no rein release is available.",
+      "created_at": "2026-11-08T18:46:16.617Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-2"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-2"
+      ],
+      "updated_at": "2026-11-08T18:46:16.618Z"
+    },
+    {
+      "id": "E-5",
+      "owner": "Engineer (Claude)",
+      "status": "BLOCKED",
+      "tier": 2,
+      "description": "Move group 2 optional workflow units from rein per .ai/architect.md §2, §5, §9 (plan E-4): copy sre_responder, dependency_manager, meta_analyst, rein-triage, rein-upgrade, rein-insights, release-manager, token-miser into plugins/rein-ops; db_architect and rein-migration into plugins/rein-data. Same two-sided protocol as E-3: names unchanged (D-055), eval suite per bundle, a .ai/MOVES.md row per unit, then SendMessage `rein · Engineer` with the unit list. Do NOT move security_engineer, identity_guardian, scope_safety or trigger-audit (architect.md §10 Q2). Acceptance: rein-ops and rein-data pass `claude plugin eval`; publish scan zero hits; MOVES.md rows added; rein · Engineer notified.",
+      "created_at": "2026-11-08T18:46:23.019Z",
+      "completed_at": null,
+      "summary": null,
+      "depends_on": [
+        "E-3"
+      ],
+      "ready": false,
+      "blocked_by": [
+        "E-3"
+      ],
+      "updated_at": "2026-11-08T18:46:23.019Z"
+    }
+  ],
+  "stamps": [
+    {
+      "type": "CLEAN_PASS",
+      "agent": "critic_clean_code",
+      "task_id": "E-2",
+      "timestamp": "2026-11-08T18:56:14.933Z",
+      "summary": "[TIER_2] E-2 standards-checker PASS — 106 files clean, 0 errors, 0 warnings, 34ms (checker: ~/.rein/scripts/standards.mjs)",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "ALIGN_PASS",
+      "agent": "blueprint-aligner",
+      "task_id": "E-2",
+      "timestamp": "2026-11-08T18:56:15.227Z",
+      "summary": "[TIER_2] E-2 marketplace skeleton aligns with architect.md §3/§7/§9: marketplace.json (rein-plugins), empty rein-seo plugin + eval suite, CI (checks/publish-scan pinned tarball/eval), check-marketplace.mjs (manifest + name collision), README stable-pointer docs. Note: stable branch cannot exist until first commit; create post-commit.",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CRITIC_STAMP",
+      "agent": "rein-review-tier2",
+      "task_id": "E-2",
+      "timestamp": "2026-11-08T18:56:31.545Z",
+      "summary": "[TIER_2] E-2 Blueprint aligned + clean-code gate clear — 0 warnings ignored",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    }
+  ],
+  "deltas": [],
+  "digest_stale": false,
+  "digest_stale_reason": null
+}

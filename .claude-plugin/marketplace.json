@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "rein-plugins",
+  "owner": {
+    "name": "Vimurai"
+  },
+  "metadata": {
+    "description": "Rein's non-gate capabilities (specialist agents, optional workflow skills, rules) as independently installable Claude Code plugins."
+  },
+  "plugins": [
+    {
+      "name": "rein-seo",
+      "source": "./plugins/rein-seo",
+      "description": "SEO and AI-engine-optimisation specialists for Rein projects.",
+      "version": "0.1.0"
+    }
+  ]
+}

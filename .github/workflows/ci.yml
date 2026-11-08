@@ -1,0 +1,88 @@
+# CI — architect.md §3.4 / §7 (E-2). Runs on every pull request and every push.
+#   checks        manifest ↔ plugins consistency, intra-repo name collisions, `claude plugin validate --strict`
+#   publish-scan  rein's publish scan (`scan-tree`) from a PINNED rein release tarball, checksum-verified;
+#                 nothing of rein is vendored here (D-003, contract §1)
+#   eval          `claude plugin eval` for every plugin in marketplace.json, in parallel
+# Each failure is one named line: [MANIFEST_MISMATCH] [NAME_COLLISION] [PUBLISH_SCAN_HIT] [EVAL_NO_CREDENTIAL] …
+# Secrets: ANTHROPIC_API_KEY (repository secret) for the eval job only; never a tracked file (§6).
+# Rollback: revert this file; .ai/DEVOPS.md records the change.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CLAUDE_CODE_VERSION: "2.1.319"
+  REIN_RELEASE: "v0.4.0"
+  REIN_RELEASE_SHA256: "d720d80167d2c3e22a4d04ce0c5de677d8992a09baf74b5f63b95df163104225"
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      plugins: ${{ steps.list.outputs.plugins }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
+        with:
+          node-version: "22"
+      - name: Manifest and name-collision check
+        run: node scripts/check-marketplace.mjs .
+      - name: Install Claude Code (pinned)
+        run: npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+      - name: Validate marketplace and every plugin
+        run: |
+          claude plugin validate --strict .
+          for d in plugins/*/; do claude plugin validate --strict "$d"; done
+      - name: List plugins for the eval matrix
+        id: list
+        run: echo "plugins=$(node -e 'console.log(JSON.stringify(require("./.claude-plugin/marketplace.json").plugins.map(p=>p.name)))')" >> "$GITHUB_OUTPUT"
+
+  publish-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
+        with:
+          node-version: "22"
+      - name: Fetch the pinned rein release
+        # Outside the workspace, so the scan's `git ls-files` never sees it.
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/rein.tar.gz" "https://codeload.github.com/Vimurai/rein/tar.gz/refs/tags/${REIN_RELEASE}"
+          echo "${REIN_RELEASE_SHA256}  $RUNNER_TEMP/rein.tar.gz" | sha256sum -c - || { echo "[REIN_RELEASE_CHECKSUM] rein ${REIN_RELEASE} tarball does not match the pinned sha256"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/rein" && tar xzf "$RUNNER_TEMP/rein.tar.gz" -C "$RUNNER_TEMP/rein" --strip-components=1
+      - name: Scan the tracked tree
+        # The verdict line is required: a scanner that ran nothing must not pass (rein E-378 P0-3).
+        run: |
+          out="$(node "$RUNNER_TEMP/rein/src/shared/publish-scan.mjs" scan-tree "$GITHUB_WORKSPACE")"
+          echo "$out"
+          [[ "$out" == "[PRIVACY_GATE_OK]"* ]]
+
+  eval:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin: ${{ fromJSON(needs.checks.outputs.plugins) }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
+        with:
+          node-version: "22"
+      - name: Install Claude Code (pinned)
+        run: npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+      - name: claude plugin eval
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PLUGIN: ${{ matrix.plugin }}   # via env, never interpolated into the script
+        run: |
+          [ -n "$ANTHROPIC_API_KEY" ] || { echo "[EVAL_NO_CREDENTIAL] ANTHROPIC_API_KEY secret is not set; the eval is required proof and does not skip"; exit 1; }
+          claude plugin eval "plugins/${PLUGIN}" --trust-plugin --no-publish --ablation none --threshold 1.0
