@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "READY"
+pattern: "rein-seo:rein-seo"
 weight: 1
 ---

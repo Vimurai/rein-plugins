@@ -111,5 +111,23 @@ privacy, D-132 settings hard-deny) are law here and are cited, not re-recorded.
 - **Also**: seo_content_generator / seo_manager depend on rein-internal files; E-6 makes the
   rein-seo bundle self-contained. Pre-existing behaviour, so not an E-3 blocker.
 
+## D-011 — Mirror of rein D-154: knowledge_architect and seo-cluster-intents stay in rein; group 1 = 12 units (2026-11-08)
+- **Decision**: (1) `knowledge_architect` stays in rein for now — no direct-read exception to
+  contract §4; it writes the palace and `rein init` dispatches it, so it is rein machinery today. It
+  moves later, reading through a palace query tool on memory-manager-mcp (a rein E-## planned with
+  the next memory work) and without the maintenance write. Its MOVES.md row is `stays-in-rein`.
+  (2) `seo-cluster-intents.mjs` stays in rein: task-synchronizer-mcp imports it to validate
+  `add_cluster_page` and the topic-seed tools, so it is MCP contract. (3) Group 1 is accepted as the
+  12 units listed in D-010; rein registers its removing E-## on the Engineer's final-list notice.
+- **Consequences for E-3 / E-6** (supersedes the "ship the cluster-intents data inside the plugin"
+  wording in E-6's task text): `seo_manager` and `seo_content_generator` take the intent set from
+  the MCP — its tool schema names the canonical set — and the blueprint from the consumer project's
+  `.ai/blueprints/seo-keyword-multiplier.md`, or say which is missing instead of aborting on a rein
+  source path. E-6 may ship a copy of the intent list for the agents' prompts only as a marked mirror
+  of the rein version it came from; the MCP refuses values outside its set, so drift fails closed.
+  No agent in this tree may depend on a rein `src/` path after the move.
+- **Body edits**: ours from the copy onward; names invariant (D-151); rein deletes its copies at the tag.
+- **Source**: rein `.ai/DECISIONS.md` D-154, commit 0c95aea.
+
 ## Reserved (awaiting upstream D-###)
-- knowledge_architect disposition → `rein · Architect` (asked 2026-11-08).
+- none.

@@ -60,6 +60,15 @@
 - seo_* dependency on rein-internal files: no issue needed — E-6 registered (depends on E-3).
 - When the 12-unit commit is on main: notify `rein · Architect` with the exact list, then
   `skill: rein-task` to close E-3.
+
+### Addendum — 2026-11-08 19:30 UTC (rein D-154 → D-011)
+- knowledge_architect stays in rein; do not copy it. MOVES.md row already added by the Architect.
+- Group 1 confirmed as the 12 units. rein registers its removing E-## on your final-list notice.
+- E-3/E-6 direction change: seo_manager / seo_content_generator must not reference any rein `src/`
+  path. Intent set comes from the task-synchronizer-mcp tool schema; blueprint from the consumer
+  project's `.ai/blueprints/`; report what is missing instead of aborting. If a prompt needs the
+  intent list inline, ship it as a marked mirror of the rein version. Strip the `src/` references in
+  E-3 if cheap; otherwise E-6.
 - The repo is not yet a git repository, so this COMM entry is uncommitted; commit it as part of
   E-2's first commit.
 - Whether `claude plugin eval` needs an API key in CI is unconfirmed; if it does, it is a CI
