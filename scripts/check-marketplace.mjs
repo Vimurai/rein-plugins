@@ -3,9 +3,14 @@
 //   [MANIFEST_MISMATCH]  a marketplace entry without a plugin dir, a plugin dir without an entry,
 //                        or an entry whose name/version disagrees with the plugin's plugin.json
 //   [NAME_COLLISION]     the same skill, agent or command name shipped by two units in plugins/**
+// and the language-pack check (.ai/blueprints/language-packs.md §Components 4):
+//   [PACK_PART_MISSING] [PACK_RUNNER_DRIFT] [PACK_HOOK_EVENT] [PACK_NAME_RESERVED]
+//   [PACK_SKILL_SHAPE] (conventions skill without paths: or over 120 lines)
+//   [PACK_DESCRIPTOR_INVALID] (pack.json against the §Data Model, incl. no downloading package runner)
 // Each problem is one named line on stderr; exit 1 on any. Needs no Rein install (§7).
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
+import { HOOK_EVENT, HOOK_MATCHER, USER_CONFIG, descriptorProblems, hooksJsonText } from "./pack-lib.mjs";
 
 const root = resolve(process.argv[2] || ".");
 const problems = [];
@@ -60,6 +65,60 @@ for (const plugin of pluginDirs) {
   }
 }
 for (const [name, where] of owners) if (where.length > 1) problems.push(`[NAME_COLLISION] ${name}: ${where.join(", ")}`);
+
+// ── Language packs (.ai/blueprints/language-packs.md §Components 4) ──
+// Every plugin is a pack `rein-<language>`: two skills, README, evals; and, when it has an edit
+// hook, the trio pack.json + hooks/hooks.json + hooks/run.mjs (all or none — rein-laravel has none).
+const template = readFileSync(join(root, "scripts", "pack-template", "run.mjs"));
+const reservedFile = join(root, "scripts", "reserved-names.json");
+const reserved = new Set(existsSync(reservedFile) ? readJson(reservedFile)?.names || [] : []);
+if (!reserved.size) problems.push("[PACK_PART_MISSING] scripts/reserved-names.json is missing or empty");
+const lines = (f) => readFileSync(f, "utf8").split("\n").length;
+const frontmatter = (f) => /^---\r?\n([\s\S]*?)\r?\n---/.exec(readFileSync(f, "utf8"))?.[1] || "";
+for (const plugin of pluginDirs) {
+  const base = join(root, "plugins", plugin);
+  const at = (...p) => join(base, ...p);
+  const lang = /^rein-([a-z][a-z0-9]*)$/.exec(plugin)?.[1];
+  if (!lang) { problems.push(`[PACK_PART_MISSING] plugins/${plugin} is not named rein-<language>`); continue; }
+  for (const skill of [`${lang}-conventions`, `${lang}-review`]) {
+    if (!existsSync(at("skills", skill, "SKILL.md"))) problems.push(`[PACK_PART_MISSING] plugins/${plugin}/skills/${skill}/SKILL.md`);
+  }
+  if (!existsSync(at("README.md"))) problems.push(`[PACK_PART_MISSING] plugins/${plugin}/README.md`);
+  const conv = at("skills", `${lang}-conventions`, "SKILL.md");
+  if (existsSync(conv)) {
+    if (!/^paths:/m.test(frontmatter(conv))) problems.push(`[PACK_SKILL_SHAPE] ${plugin}: ${lang}-conventions has no paths: in its frontmatter`);
+    if (lines(conv) > 120) problems.push(`[PACK_SKILL_SHAPE] ${plugin}: ${lang}-conventions is ${lines(conv)} lines (limit 120)`);
+  }
+  for (const s of dirs(at("skills"))) {
+    const f = at("skills", s, "SKILL.md");
+    const n = existsSync(f) ? fmName(f) || s : s;
+    if (/^(rein|arch)-/.test(n) || reserved.has(n)) problems.push(`[PACK_NAME_RESERVED] ${plugin}: skill ${n} is reserved by rein (prefix rein-/arch- or scripts/reserved-names.json)`);
+  }
+  const pj = existsSync(at(".claude-plugin", "plugin.json")) ? readJson(at(".claude-plugin", "plugin.json")) : null;
+  for (const k of ["hooks", "mcpServers", "lspServers"]) if (pj && k in pj) problems.push(`[PACK_HOOK_EVENT] ${plugin}: plugin.json declares "${k}" — a pack registers only hooks/hooks.json`);
+
+  const trio = [at("pack.json"), at("hooks", "hooks.json"), at("hooks", "run.mjs")];
+  const present = trio.filter((p) => existsSync(p));
+  if (present.length === 0) {
+    if (pj?.userConfig) problems.push(`[PACK_PART_MISSING] ${plugin}: userConfig without an edit hook`);
+    continue;
+  }
+  if (present.length < 3) {
+    for (const p of trio) if (!existsSync(p)) problems.push(`[PACK_PART_MISSING] ${p.slice(root.length + 1)} (pack.json, hooks/hooks.json and hooks/run.mjs come together)`);
+    continue;
+  }
+  if (!readFileSync(at("hooks", "run.mjs")).equals(template)) problems.push(`[PACK_RUNNER_DRIFT] ${plugin}: hooks/run.mjs differs from scripts/pack-template/run.mjs — run: node scripts/new-pack.mjs --sync`);
+  const pack = readJson(at("pack.json"));
+  const bad = pack ? descriptorProblems(pack) : ["unreadable"];
+  for (const b of bad) problems.push(`[PACK_DESCRIPTOR_INVALID] ${plugin}/pack.json: ${b}`);
+  if (pack && pack.language !== lang) problems.push(`[PACK_DESCRIPTOR_INVALID] ${plugin}/pack.json: language ${JSON.stringify(pack.language)}, expected "${lang}"`);
+  const hooks = readJson(at("hooks", "hooks.json"));
+  const events = Object.keys(hooks?.hooks || {});
+  for (const ev of events) if (ev !== HOOK_EVENT) problems.push(`[PACK_HOOK_EVENT] ${plugin}: hooks.json registers ${ev} — only ${HOOK_EVENT} is allowed`);
+  for (const group of hooks?.hooks?.[HOOK_EVENT] || []) if (group.matcher !== HOOK_MATCHER) problems.push(`[PACK_HOOK_EVENT] ${plugin}: matcher ${JSON.stringify(group.matcher)}, expected "${HOOK_MATCHER}"`);
+  if (pack && !bad.length && readFileSync(at("hooks", "hooks.json"), "utf8") !== hooksJsonText(pack)) problems.push(`[PACK_RUNNER_DRIFT] ${plugin}: hooks/hooks.json is not what new-pack --sync generates from pack.json — run: node scripts/new-pack.mjs --sync`);
+  if (JSON.stringify(pj?.userConfig) !== JSON.stringify(USER_CONFIG)) problems.push(`[PACK_PART_MISSING] ${plugin}: plugin.json userConfig must be exactly format_on_edit + lint_on_edit (scripts/pack-lib.mjs)`);
+}
 
 for (const p of problems) console.error(p);
 if (problems.length) process.exit(1);

@@ -60,3 +60,15 @@ rein checkout (`node <rein>/src/shared/publish-scan.mjs scan-tree .`), and
   profile is removed on exit.
 - **Rollback**: delete the step; the script can stay.
 - **Proof**: live local run on 2.1.326 — `[FIXTURE_Q5_M3] 2.1.326 source=github exit=0 ref=stable repo=Vimurai/rein-plugins ok`.
+
+## E-11 — pack check, hook tests and reserved names in CI (2026-11-17)
+- **Change**: `checks` gains `bash tests/run.sh` (pack hook tests with stub formatter/linter executables,
+  pack-check tests, unit tests); `scripts/check-marketplace.mjs` now also runs the language-pack check
+  (`[PACK_PART_MISSING]` `[PACK_RUNNER_DRIFT]` `[PACK_HOOK_EVENT]` `[PACK_NAME_RESERVED]`
+  `[PACK_SKILL_SHAPE]` `[PACK_DESCRIPTOR_INVALID]`). `publish-scan` gains
+  `node scripts/reserved-names.mjs "$RUNNER_TEMP/rein" "$REIN_RELEASE" --check` against the tree it
+  already fetches and checksum-verifies (`[PACK_RESERVED_DRIFT]`).
+- **Security**: no new secret, network or permission. The hook tests run only stub executables they
+  write into a per-test temp dir (removed after each test); no real toolchain is installed.
+- **Rollback**: delete the two steps; `check-marketplace.mjs` can be reverted to its pre-pack version.
+- **Proof**: `bash tests/run.sh` green locally (28 tests); a real `rein ci run` before push.

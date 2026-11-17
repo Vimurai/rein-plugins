@@ -4,11 +4,11 @@
 // CLAUDE_CONFIG_DIR. Exit 0 whatever is observed; the lines are evidence for rein-app, not a gate.
 //
 //   M1  registration by start, unauthenticated: a profile holding only the github registration entry
-//       (+ enabledPlugins rein-seo) gets one `claude -p` start with no credential. Reports whether
+//       (+ enabledPlugins rein-typescript) gets one `claude -p` start with no credential. Reports whether
 //       known_marketplaces.json carries ref "stable" and whether the clone's HEAD equals origin/stable.
 //       A mismatch also prints [FIXTURE_Q5_TRUNK_TRACKING]: tell the Architect the same day.
 //   M2  install by start, authenticated (ANTHROPIC_API_KEY): three fresh profiles holding the github
-//       entry and only enabledPlugins {"rein-seo@rein-plugins": true}, one default start each (no
+//       entry and only enabledPlugins {"rein-typescript@rein-plugins": true}, one default start each (no
 //       CLAUDE_CODE_SYNC_PLUGIN_INSTALL). Counts installs, records version + sha.
 //   M4  idempotence: `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` on the
 //       profile M1's start reconciled — exit code, entry unchanged, no duplicate key.
@@ -57,10 +57,10 @@ const registration = (enabled) => ({
   extraKnownMarketplaces: { [MKT]: { source: { source: "github", repo: REPO, ref: REF } } },
   enabledPlugins: enabled,
 });
-const seoOnly = { [`rein-seo@${MKT}`]: true };
+const probeOnly = { [`rein-typescript@${MKT}`]: true };
 
 // ── M1 ──
-const m1 = profile("m1", registration(seoOnly));
+const m1 = profile("m1", registration(probeOnly));
 start(m1); // unauthenticated on purpose: "Not logged in" still shows whether a start registers
 {
   const { known } = snapshot(m1);
@@ -78,7 +78,7 @@ if (!process.env.ANTHROPIC_API_KEY) {
 } else {
   const samples = [], exits = [];
   for (let i = 1; i <= 3; i++) {
-    const cfg = profile(`m2-${i}`, registration(seoOnly));
+    const cfg = profile(`m2-${i}`, registration(probeOnly));
     exits.push(start(cfg, { auth: true }).status);
     samples.push(readJson(join(cfg, "plugins", "installed_plugins.json")));
   }
