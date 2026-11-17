@@ -405,6 +405,15 @@
       "summary": "[TIER_1] E-10 bookkeeping carry: staged .ai/ tree is byte-identical to engineer/e3-group1 tip e4e1ed2 (11 Architect .ai commits + E-9 stamps); no path outside .ai/ staged; no plugins/ change",
       "sha": "02987aa2cf808c7948b2fb2a91daad3e24c0d008",
       "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CRITIC_STAMP",
+      "agent": "Engineer",
+      "task_id": "E-10",
+      "timestamp": "2026-11-17T18:10:32.451Z",
+      "summary": "[TIER_1] E-10 MOVES.md: all 14 rows set to withdrawn (D-017), status column only; Architect banner untouched",
+      "sha": "6c179f3589d230b4ee93723d46fbf013e39fa8bc",
+      "author": "32126521+Vimurai@users.noreply.github.com"
     }
   ],
   "deltas": [],
