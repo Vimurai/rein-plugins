@@ -28,6 +28,10 @@
 - UNDELIVERED (2026-11-17, both sessions were down): tell `rein · Architect` the move plan is
   withdrawn so rein drops its planned removals; tell `rein-app · Architect` the plugin names change
   to the 14 packs. Text of both is in COMM.md addendum 2026-11-17. Send when they are reachable.
+- UNDELIVERED too (E-9 finding, 2026-11-17, Claude Code 2.1.326): an unauthenticated start
+  registers a directory source but NOT the github `Vimurai/rein-plugins#stable` source (M1
+  registered=false, M4 NOT_RECONCILED); authenticated start untested until the secret is set.
+  Goes to `rein-app · Architect`: their hand-written-entry fallback may not register.
 - Pending pings (Architect): rein-app · Architect when the first tag is on `stable`, and the same
   day on an M1 HEAD ≠ origin/stable or `[FIXTURE_REF_MISSING]` line.
 - Hard rules: no writes to ~/.rein or profile hooks/autoMode/permissions/defaultMode; no
