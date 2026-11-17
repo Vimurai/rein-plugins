@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { MKT, classifyM1, classifyM4, formatLine, summariseM2 } from "./q5.mjs";
+import { MKT, classifyM1, classifyM3, classifyM4, formatLine, summariseM2 } from "./q5.mjs";
 
 const A = "a".repeat(40), B = "b".repeat(40);
 const gh = (ref) => ({ source: "github", repo: "Vimurai/rein-plugins", ...(ref ? { ref } : {}) });
@@ -73,4 +73,13 @@ test("no result line carries a filesystem path (D-117)", () => {
 test("every M line names the Claude version and the source kind (Architect 2026-11-17 18:40)", () => {
   assert.equal(formatLine(1, "2.1.326", "registered=false"), "[FIXTURE_Q5_M1] 2.1.326 source=github registered=false");
   assert.match(formatLine(4, "2.1.326", "prior=NOT_RECONCILED", "directory"), /^\[FIXTURE_Q5_M4\] 2\.1\.326 source=directory /);
+});
+
+test("M3: the shorthand registration passes only with ref stable and the repo", () => {
+  const s = (source) => ({ extraKnownMarketplaces: { [MKT]: { source } } });
+  assert.deepEqual(classifyM3(s(gh("stable"))), { line: "ref=stable repo=Vimurai/rein-plugins ok", fail: null });
+  assert.equal(classifyM3(s(gh())).fail, "[FIXTURE_REF_MISSING]");
+  assert.equal(classifyM3(s(gh("bogus-ref"))).fail, "[FIXTURE_SHAPE_DRIFT]");
+  assert.equal(classifyM3(s({ ...gh("stable"), repo: "someone/fork" })).fail, "[FIXTURE_SHAPE_DRIFT]");
+  assert.equal(classifyM3(null).fail, "[FIXTURE_SHAPE_DRIFT]");
 });

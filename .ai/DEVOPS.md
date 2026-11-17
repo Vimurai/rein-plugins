@@ -47,3 +47,16 @@ rein checkout (`node <rein>/src/shared/publish-scan.mjs scan-tree .`), and
   versions only, never a path or account data (D-117, unit-tested).
 - **Cost**: M2 makes three one-turn authenticated starts per run.
 - **Rollback**: delete the two steps; the scripts can stay.
+
+## E-8 — M3 shorthand-registration assertion in the registration job (2026-11-17)
+- **Change**: one step appended to `registration`: `node tests/registration/m3-ref.mjs` (D-014). Unlike
+  M1/M2/M4 it is an assertion: in a fresh `CLAUDE_CONFIG_DIR`, `claude plugin marketplace add
+  Vimurai/rein-plugins#stable --scope user` must write `extraKnownMarketplaces["rein-plugins"].source`
+  with ref `stable` and repo `Vimurai/rein-plugins`. Fails the job with `[FIXTURE_REF_MISSING]` (ref
+  absent) or `[FIXTURE_SHAPE_DRIFT]`; skips with `[FIXTURE_SKIP_NO_NETWORK]` / `[FIXTURE_SKIP_NO_CLAUDE]`.
+  Its classifier is unit-tested (bogus ref, absent ref, other repo) in `q5.test.mjs`, which `tests/run.sh` runs.
+- **Security**: no secret (the step has no `env`; the script also strips `CLAUDE_*`/`ANTHROPIC_*`). New
+  network: `github.com` (ls-remote + the marketplace clone of this public repo). No new permissions. The
+  profile is removed on exit.
+- **Rollback**: delete the step; the script can stay.
+- **Proof**: live local run on 2.1.326 — `[FIXTURE_Q5_M3] 2.1.326 source=github exit=0 ref=stable repo=Vimurai/rein-plugins ok`.

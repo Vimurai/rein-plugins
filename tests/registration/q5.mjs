@@ -59,3 +59,17 @@ export function classifyM4({ exit, before, after }) {
     ok: prior === "reconciled" && exit === 0 && unchanged && !dup,
   };
 }
+
+// M3 — GitHub-shorthand registration (E-8, D-014). The ONE assertion among the Q5 lines: after
+// `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user`, the written settings
+// must carry the ref and the repo. `settings` is the parsed settings.json. `fail` is the named
+// reason, or null when the registration is right.
+export function classifyM3(settings) {
+  const src = settings?.extraKnownMarketplaces?.[MKT]?.source;
+  if (!src) return { line: "registered=false", fail: "[FIXTURE_SHAPE_DRIFT]" };
+  const ref = typeof src.ref === "string" ? src.ref : "absent";
+  const line = `ref=${ref} repo=${src.repo ?? "absent"}`;
+  if (ref === "absent") return { line, fail: "[FIXTURE_REF_MISSING]" };
+  if (ref !== REF || src.repo !== REPO) return { line, fail: "[FIXTURE_SHAPE_DRIFT]" };
+  return { line: `${line} ok`, fail: null };
+}
