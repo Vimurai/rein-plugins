@@ -1,7 +1,9 @@
 # CI — architect.md §3.4 / §7 (E-2). Runs on every pull request and every push.
-#   checks        manifest ↔ plugins consistency, intra-repo name collisions, `claude plugin validate --strict`
+#   checks        manifest ↔ plugins consistency, intra-repo name collisions, the language-pack check,
+#                 hook tests with stub tools + unit tests (tests/run.sh), `claude plugin validate --strict`
 #   publish-scan  rein's publish scan (`scan-tree`) from a PINNED rein release tarball, checksum-verified;
-#                 nothing of rein is vendored here (D-003, contract §1)
+#                 nothing of rein is vendored here (D-003, contract §1); the same tree checks that
+#                 scripts/reserved-names.json still matches it ([PACK_RESERVED_DRIFT])
 #   eval          `claude plugin eval` for every plugin in marketplace.json, in parallel
 #   registration  E-4 fixture: every bundle installs through the rein-app registration JSON (D-006);
 #                 E-9 Q5 measurements M1/M2/M4 against the live repo (D-016, report-only);
@@ -34,8 +36,10 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
         with:
           node-version: "22"
-      - name: Manifest and name-collision check
+      - name: Manifest, name-collision and pack check
         run: node scripts/check-marketplace.mjs .
+      - name: Hook tests (stub tools) and unit tests
+        run: bash tests/run.sh
       - name: Install Claude Code (pinned)
         run: npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
       - name: Validate marketplace and every plugin
@@ -66,6 +70,8 @@ jobs:
           out="$(node "$RUNNER_TEMP/rein/src/shared/publish-scan.mjs" scan-tree "$GITHUB_WORKSPACE")"
           echo "$out"
           [[ "$out" == "[PRIVACY_GATE_OK]"* ]]
+      - name: Reserved skill names match the pinned rein release
+        run: node scripts/reserved-names.mjs "$RUNNER_TEMP/rein" "${REIN_RELEASE}" --check
 
   eval:
     needs: checks

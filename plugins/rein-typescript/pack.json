@@ -1,0 +1,32 @@
+{
+  "language": "typescript",
+  "extensions": [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"],
+  "format": [
+    {
+      "bin": "biome",
+      "local": ["node_modules/.bin"],
+      "args": ["format", "--write", "--no-errors-on-unmatched", "{file}"],
+      "needs": ["biome.json", "biome.jsonc"]
+    },
+    {
+      "bin": "prettier",
+      "local": ["node_modules/.bin"],
+      "args": ["--write", "--log-level", "warn", "{file}"],
+      "needs": [".prettierrc", ".prettierrc.json", ".prettierrc.json5", ".prettierrc.yaml", ".prettierrc.yml", ".prettierrc.toml", ".prettierrc.js", ".prettierrc.cjs", ".prettierrc.mjs", ".prettierrc.ts", "prettier.config.js", "prettier.config.cjs", "prettier.config.mjs", "prettier.config.ts"]
+    }
+  ],
+  "lint": [
+    {
+      "bin": "biome",
+      "local": ["node_modules/.bin"],
+      "args": ["lint", "--no-errors-on-unmatched", "{file}"],
+      "needs": ["biome.json", "biome.jsonc"]
+    },
+    {
+      "bin": "eslint",
+      "local": ["node_modules/.bin"],
+      "args": ["--no-warn-ignored", "{file}"],
+      "needs": ["eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "eslint.config.ts", "eslint.config.mts", "eslint.config.cts"]
+    }
+  ]
+}

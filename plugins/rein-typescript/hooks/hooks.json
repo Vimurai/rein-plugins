@@ -1,0 +1,107 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(**/*.ts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .ts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.ts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .ts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.tsx)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .tsx",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.tsx)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .tsx",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.mts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .mts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.mts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .mts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.cts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .cts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.cts)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .cts",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.js)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .js",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.js)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .js",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.jsx)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .jsx",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.jsx)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .jsx",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.mjs)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .mjs",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.mjs)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .mjs",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.cjs)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Edit .cjs",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.cjs)",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/run.mjs\" Write .cjs",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}

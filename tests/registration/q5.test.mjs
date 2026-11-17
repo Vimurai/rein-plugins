@@ -37,9 +37,9 @@ test("M1: not registered and registered-without-clone are distinct results", () 
 });
 
 test("M2: counts installs across profiles and collapses version/sha", () => {
-  const hit = { plugins: { [`rein-seo@${MKT}`]: [{ version: "0.1.0", gitCommitSha: A }] } };
-  assert.equal(summariseM2([hit, null, hit]), `rein-seo@${MKT} installs=2/3 version=0.1.0 sha=aaaaaaa`);
-  assert.equal(summariseM2([null, { plugins: {} }, null]), `rein-seo@${MKT} installs=0/3 version=- sha=-`);
+  const hit = { plugins: { [`rein-typescript@${MKT}`]: [{ version: "0.1.0", gitCommitSha: A }] } };
+  assert.equal(summariseM2([hit, null, hit]), `rein-typescript@${MKT} installs=2/3 version=0.1.0 sha=aaaaaaa`);
+  assert.equal(summariseM2([null, { plugins: {} }, null]), `rein-typescript@${MKT} installs=0/3 version=- sha=-`);
 });
 
 test("M4: re-adding on a reconciled profile with the same entry is idempotent", () => {

@@ -1,0 +1,23 @@
+{
+  "name": "rein-typescript",
+  "version": "0.1.0",
+  "description": "TypeScript and JavaScript conventions and a review checklist for Claude, and the project's own formatter and linter on every edited file.",
+  "author": {
+    "name": "Vimurai"
+  },
+  "license": "Apache-2.0",
+  "userConfig": {
+    "format_on_edit": {
+      "type": "boolean",
+      "title": "Format on edit",
+      "description": "Run the project's own formatter on each file Claude edits.",
+      "default": true
+    },
+    "lint_on_edit": {
+      "type": "boolean",
+      "title": "Lint on edit",
+      "description": "Run the project's own linter on each file Claude edits and show its findings to Claude.",
+      "default": true
+    }
+  }
+}

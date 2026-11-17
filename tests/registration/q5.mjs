@@ -37,7 +37,7 @@ export function classifyM1({ known, head, originStable }) {
 
 // M2 — install by start across N fresh profiles. `samples` = one parsed installed_plugins.json
 // (or null when the file is absent) per profile.
-export function summariseM2(samples, plugin = `rein-seo@${MKT}`) {
+export function summariseM2(samples, plugin = `rein-typescript@${MKT}`) {
   const hits = samples.map((s) => s?.plugins?.[plugin]?.[0]).filter(Boolean);
   const versions = [...new Set(hits.map((h) => h.version || "unknown"))].join(",") || "-";
   const shas = [...new Set(hits.map((h) => short(h.gitCommitSha)))].join(",") || "-";

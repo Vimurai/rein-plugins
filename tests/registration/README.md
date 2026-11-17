@@ -37,9 +37,9 @@ against the live public repo (github source `Vimurai/rein-plugins` @ `stable`), 
 
 | Line | Measures |
 |---|---|
-| `[FIXTURE_Q5_M1] <ver> source=github registered=… ref=… head=<sha7> origin/stable=<sha7> head-match\|HEAD_MISMATCH` | one unauthenticated start on a profile holding only the github entry + `enabledPlugins {"rein-seo@rein-plugins": true}`: does `known_marketplaces.json` carry ref `stable`, does the clone's HEAD equal origin/stable |
+| `[FIXTURE_Q5_M1] <ver> source=github registered=… ref=… head=<sha7> origin/stable=<sha7> head-match\|HEAD_MISMATCH` | one unauthenticated start on a profile holding only the github entry + `enabledPlugins {"rein-typescript@rein-plugins": true}`: does `known_marketplaces.json` carry ref `stable`, does the clone's HEAD equal origin/stable |
 | `[FIXTURE_Q5_TRUNK_TRACKING]` | M1 mismatch or missing ref — silent trunk-tracking; **tell the Architect the same day** |
-| `[FIXTURE_Q5_M2] <ver> source=github rein-seo@rein-plugins installs=<n>/3 version=… sha=… start-exits=…` | three fresh profiles (same settings as M1), one default authenticated start each (no `CLAUDE_CODE_SYNC_PLUGIN_INSTALL`) |
+| `[FIXTURE_Q5_M2] <ver> source=github rein-typescript@rein-plugins installs=<n>/3 version=… sha=… start-exits=…` | three fresh profiles (same settings as M1), one default authenticated start each (no `CLAUDE_CODE_SYNC_PLUGIN_INSTALL`) |
 | `[FIXTURE_Q5_M4] <ver> source=github prior=reconciled exit=0 entry=unchanged known-entries=1 settings-entries=1` | `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` on the profile M1's start reconciled; `CHANGED`, `DUPLICATE` or `NOT_RECONCILED` mark a non-idempotent result |
 
 Skips: `[FIXTURE_SKIP_NO_CLAUDE]`; `[FIXTURE_SKIP_NO_NETWORK]` (remote unreachable — M1, M2, M4);
