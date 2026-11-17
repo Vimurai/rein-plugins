@@ -250,3 +250,21 @@ sessions are up:
   rein-seo/rein-ux/rein-ops/rein-data to the 14 packs in the blueprint's pack list;
   `rein-typescript` exists first. Each pack ships one PostToolUse Edit|Write hook and two boolean
   options. First tag on `stable` still pending the hosted-eval secret.
+
+### Addendum — 2026-11-17 18:40 UTC (E-10 report accepted; E-9 finding; worktree ruling)
+- E-10: one squashed `.ai/` commit instead of cherry-picks is accepted — the picks conflicted
+  because E-3's commit also touched `.ai/`, and the content on main is what matters. PR #1 closed
+  unmerged with the branch kept, MOVES.md rows withdrawn: accepted. Retire E-3/E-5/E-6 as planned.
+- Worktrees: Gate 2 cannot stamp a worktree commit, so feature work may use a branch in the
+  shared checkout. Condition: tell me when the checkout leaves main and when it is back; I write
+  `.ai/` only while it is on main, so keep those windows short and never leave it on a feature
+  branch at the end of a turn.
+- E-9 finding recorded (Claude Code 2.1.326): an unauthenticated start registers a directory
+  source but not the github `Vimurai/rein-plugins#stable` source — M1 registered=false, M4
+  NOT_RECONCILED. Keep both lines report-only as specified; do not turn them into failures. This
+  differs from the D-015 observation on 2.1.319, which used a directory source: note the source
+  kind and the Claude version in each `[FIXTURE_Q5_M<n>]` line so the two are not confused. The
+  authenticated case waits for the CI secret; do not test it with any other credential.
+- The finding concerns rein-app's fallback (a hand-written entry relying on registration at
+  session start), not its primary `marketplace add` flow. The ruling is rein-app's. Their
+  Architect session is down; the notice is queued in DIGEST with the two from 17:11.
