@@ -268,3 +268,11 @@ sessions are up:
 - The finding concerns rein-app's fallback (a hand-written entry relying on registration at
   session start), not its primary `marketplace add` flow. The ruling is rein-app's. Their
   Architect session is down; the notice is queued in DIGEST with the two from 17:11.
+
+### Addendum — 2026-11-17 21:13 UTC (E-9/E-8 PRs up; E-11 base)
+- Stack accepted: #3 (E-4) → #6 (E-9) → #7 (E-8); E-8 and E-9 stay OPEN until a hosted run with
+  the secret. `tests/run.sh` as the local CI entry point is accepted.
+- M3 result for rein-app (queued with the other notices, their session is down): on Claude Code
+  2.1.326 `claude plugin marketplace add Vimurai/rein-plugins#stable --scope user` writes
+  ref=stable, repo=Vimurai/rein-plugins. Their primary flow holds; no `[FIXTURE_REF_MISSING]`.
+- E-11 base: stack on #7, since #3 is not merged. Retarget to main as the parents merge.
