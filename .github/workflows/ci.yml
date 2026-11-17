@@ -3,7 +3,8 @@
 #   publish-scan  rein's publish scan (`scan-tree`) from a PINNED rein release tarball, checksum-verified;
 #                 nothing of rein is vendored here (D-003, contract §1)
 #   eval          `claude plugin eval` for every plugin in marketplace.json, in parallel
-#   registration  E-4 fixture: every bundle installs through the rein-app registration JSON (D-006)
+#   registration  E-4 fixture: every bundle installs through the rein-app registration JSON (D-006);
+#                 E-9 Q5 measurements M1/M2/M4 against the live repo (D-016, report-only)
 # Each failure is one named line: [MANIFEST_MISMATCH] [NAME_COLLISION] [PUBLISH_SCAN_HIT] [EVAL_NO_CREDENTIAL] …
 # Secrets: ANTHROPIC_API_KEY (repository secret) for the eval and registration jobs only; never a tracked file (§6).
 # Rollback: revert this file; .ai/DEVOPS.md records the change.
@@ -91,7 +92,7 @@ jobs:
   registration:
     # E-4 registration fixture (architect.md §3.5, D-006, D-012): installs every bundle through the
     # exact rein-app registration JSON in a throwaway profile. The settings-only reconcile layer is
-    # report-only ([FIXTURE_Q4_OBSERVED]) while rein-app re-rules D-013/D-014; with the secret it
+    # report-only ([FIXTURE_Q5_OBSERVED]) while rein-app re-rules D-013/D-014; with the secret it
     # also shows authenticated behaviour.
     needs: checks
     runs-on: ubuntu-latest
@@ -107,3 +108,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node tests/registration/fixture.mjs "$GITHUB_WORKSPACE"
+      - name: Q5 classifier unit tests
+        run: node --test tests/registration/q5.test.mjs
+      - name: Q5 measurements (E-9, D-016 M1/M2/M4, report-only)
+        # Live repo, github source @ stable; the secret reaches M2's starts only. Exit 0 whatever is observed.
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node tests/registration/q5-measurements.mjs

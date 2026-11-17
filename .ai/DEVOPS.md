@@ -34,3 +34,16 @@ rein checkout (`node <rein>/src/shared/publish-scan.mjs scan-tree .`), and
 - **Change**: new `registration` job running the fixture. It needs no rein release (D-012); it skips only on a missing `claude` CLI; without `ANTHROPIC_API_KEY` its reconcile start runs unauthenticated (report-only either way).
 - **Security**: reuses the existing `ANTHROPIC_API_KEY` secret; the fixture writes only to fresh temp profiles (`CLAUDE_CONFIG_DIR`), never the runner's real profile. No new network beyond npm.
 - **Rollback**: delete the job; the fixture file can stay.
+
+## E-9 — Q5 measurements in the registration job (2026-11-17)
+- **Change**: two steps appended to `registration`: `node --test tests/registration/q5.test.mjs`
+  (pure classifiers) and `node tests/registration/q5-measurements.mjs` (D-016 M1/M2/M4,
+  report-only, exit 0 whatever is observed; lines `[FIXTURE_Q5_M<n>] <claude version> <result>`,
+  each with `source=<kind>` after the version, plus `[FIXTURE_Q5_TRUNK_TRACKING]` on an M1 mismatch). The existing fixture step is unchanged.
+- **Security**: reuses `ANTHROPIC_API_KEY`, passed only to M2's starts (M1 and M4 run
+  unauthenticated on purpose). Every run writes only to fresh temp profiles, removed on exit.
+  New network: `github.com` (git ls-remote + the marketplace clone of this public repo); no
+  token is needed or passed. No new permissions. Lines carry refs, short shas, counts and
+  versions only, never a path or account data (D-117, unit-tested).
+- **Cost**: M2 makes three one-turn authenticated starts per run.
+- **Rollback**: delete the two steps; the scripts can stay.

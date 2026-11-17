@@ -11,7 +11,7 @@
 //              shape (same key, same boolean map).
 //   reconcile  a fresh profile holding ONLY the registration JSON: reports whether the marketplace
 //              is registered before and after one headless start (CLAUDE_CODE_SYNC_PLUGIN_INSTALL=1)
-//              and whether each bundle got installed. REPORT-ONLY ([FIXTURE_Q4_OBSERVED]) while
+//              and whether each bundle got installed. REPORT-ONLY ([FIXTURE_Q5_OBSERVED]) while
 //              rein-app answers Q5 (D-015 suspends D-013 (c) and D-014). Runs without a credential too (the start
 //              then fails "Not logged in", which still shows registration); with ANTHROPIC_API_KEY set
 //              a start that cannot run fails [FIXTURE_RECONCILE].
@@ -122,23 +122,23 @@ const assertInstalled = (cfg, layer, skip = new Set()) => {
   const settings = { extraKnownMarketplaces: { [MKT]: { source: localSource } }, enabledPlugins: {} };
   for (const name of required) settings.enabledPlugins[`${name}@${MKT}`] = true;
   writeFileSync(join(cfg, "settings.json"), JSON.stringify(settings, null, 2));
-  say(`[FIXTURE_Q4_OBSERVED] before any start: marketplace registered=${registered(cfg)}`);
+  say(`[FIXTURE_Q5_OBSERVED] before any start: marketplace registered=${registered(cfg)}`);
   const r = claude(cfg, ["-p", "Reply with OK.", "--max-turns", "1", "--output-format", "stream-json", "--verbose"],
     { CLAUDE_CODE_SYNC_PLUGIN_INSTALL: "1" });
   if (cred && r.status !== 0) fail(`[FIXTURE_RECONCILE] headless start failed with a credential (exit ${r.status}): ${lastLine(r)}`);
   if (!cred) say("[FIXTURE_SKIP_NO_CREDENTIAL] ANTHROPIC_API_KEY is unset — the start ran unauthenticated; install state below shows no-auth behaviour only");
   const init = r.stdout.split("\n").map((l) => { try { return JSON.parse(l); } catch { return null; } })
     .find((e) => e?.type === "system" && e?.subtype === "init");
-  if (init?.plugin_errors?.length) say(`[FIXTURE_Q4_OBSERVED] init plugin_errors: ${JSON.stringify(init.plugin_errors).slice(0, 300)}`);
+  if (init?.plugin_errors?.length) say(`[FIXTURE_Q5_OBSERVED] init plugin_errors: ${JSON.stringify(init.plugin_errors).slice(0, 300)}`);
   const loaded = new Set((init?.plugins || []).map((p) => (typeof p === "string" ? p : p.name)));
   const have = installed(cfg);
-  say(`[FIXTURE_Q4_OBSERVED] after one ${cred ? "authenticated" : "unauthenticated"} start: marketplace registered=${registered(cfg)}`);
+  say(`[FIXTURE_Q5_OBSERVED] after one ${cred ? "authenticated" : "unauthenticated"} start: marketplace registered=${registered(cfg)}`);
   for (const name of required) {
     const id = `${name}@${MKT}`, p = have.get(id);
     const state = p ? (p.enabled === true ? "installed+enabled" : "installed,disabled") : "not-installed";
     // Sync install is forced so a short -p run does not exit before a background install lands;
     // rein-app's real flow does not set it, so the line says so (E-9 M2 measures the default).
-    say(`[FIXTURE_Q4_OBSERVED] ${id} from settings alone (sync-install forced): ${state}; loaded-at-init=${loaded.has(name) || loaded.has(id)}`);
+    say(`[FIXTURE_Q5_OBSERVED] ${id} from settings alone (sync-install forced): ${state}; loaded-at-init=${loaded.has(name) || loaded.has(id)}`);
   }
 }
 finish();
