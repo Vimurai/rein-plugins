@@ -408,6 +408,42 @@
       "summary": "[TIER_1] E-10 MOVES.md: all 14 rows set to withdrawn (D-017), status column only; Architect banner untouched",
       "sha": "6c179f3589d230b4ee93723d46fbf013e39fa8bc",
       "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "ALIGN_PASS",
+      "agent": "Engineer",
+      "task_id": "E-9",
+      "timestamp": "2026-11-17T20:57:26.506Z",
+      "summary": "[TIER_2] E-9 on 76f9762 (E-4 rebased onto main): aligner WARN only — ORPHANED_WORK for q5*.mjs/evidence (task covered by architect.md §9 E-9 row + D-016, file names not listed); CAPABILITIES_BYPASS fixed (test path from tmpdir). Lines carry version + source kind per Architect 18:40; tests 9/9; tests/run.sh added as local CI entry",
+      "sha": "76f9762228ae6b433858d149b99c5d1c2023c7ad",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CRITIC_STAMP",
+      "agent": "Engineer",
+      "task_id": "E-9",
+      "timestamp": "2026-11-17T20:57:27.574Z",
+      "summary": "[TIER_2] E-9 Blueprint aligned — 1 warning (ORPHANED_WORK, file names not in architect.md) acknowledged",
+      "sha": "76f9762228ae6b433858d149b99c5d1c2023c7ad",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "ALIGN_PASS",
+      "agent": "Engineer",
+      "task_id": "E-8",
+      "timestamp": "2026-11-17T20:59:17.784Z",
+      "summary": "[TIER_2] E-8 on f0b99ed: M3 assertion per E-8 row + D-014 — ref/repo checked, [FIXTURE_REF_MISSING]/[FIXTURE_SHAPE_DRIFT] exit 1, offline/no-CLI skips, bogus-ref unit test (10/10), live run ok on 2.1.326; ci_gate DEVOPS entry; aligner WARN ORPHANED_WORK only (file names not in architect.md)",
+      "sha": "f0b99edefab6e8a3621cb40626bf467760fb825e",
+      "author": "32126521+Vimurai@users.noreply.github.com"
+    },
+    {
+      "type": "CRITIC_STAMP",
+      "agent": "Engineer",
+      "task_id": "E-8",
+      "timestamp": "2026-11-17T20:59:18.728Z",
+      "summary": "[TIER_2] E-8 Blueprint aligned — 1 warning (ORPHANED_WORK) acknowledged",
+      "sha": "f0b99edefab6e8a3621cb40626bf467760fb825e",
+      "author": "32126521+Vimurai@users.noreply.github.com"
     }
   ],
   "deltas": [],
