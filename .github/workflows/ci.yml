@@ -4,7 +4,8 @@
 #                 nothing of rein is vendored here (D-003, contract §1)
 #   eval          `claude plugin eval` for every plugin in marketplace.json, in parallel
 #   registration  E-4 fixture: every bundle installs through the rein-app registration JSON (D-006);
-#                 E-9 Q5 measurements M1/M2/M4 against the live repo (D-016, report-only)
+#                 E-9 Q5 measurements M1/M2/M4 against the live repo (D-016, report-only);
+#                 E-8 M3 shorthand-registration assertion (D-014) — fails on [FIXTURE_REF_MISSING]
 # Each failure is one named line: [MANIFEST_MISMATCH] [NAME_COLLISION] [PUBLISH_SCAN_HIT] [EVAL_NO_CREDENTIAL] …
 # Secrets: ANTHROPIC_API_KEY (repository secret) for the eval and registration jobs only; never a tracked file (§6).
 # Rollback: revert this file; .ai/DEVOPS.md records the change.
@@ -115,3 +116,6 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node tests/registration/q5-measurements.mjs
+      - name: M3 shorthand registration keeps ref stable (E-8, D-014 — assertion)
+        # No secret: `marketplace add` needs none. Fails on [FIXTURE_REF_MISSING] / [FIXTURE_SHAPE_DRIFT].
+        run: node tests/registration/m3-ref.mjs
